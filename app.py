@@ -40,6 +40,46 @@ rango_fecha = st.selectbox(
 
 tipo_acceso = st.selectbox("Filtro de costo:", ["AMBOS", "GRATIS", "DE PAGA"])
 
+# FUNCIÓN INTERNA DE RASTREO Y LIMPIEZA AUTOMÁTICA
+def rastrear_categoria(termino_busqueda, ciudad_nombre, filtro_tiempo):
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+    query = urllib.parse.quote(f"{termino_busqueda} en {ciudad_nombre} {filtro_tiempo}")
+    url = f"https://html.duckduckgo.com/html/?q={query}"
+    
+    resultados_limpios = []
+    try:
+        response = requests.get(url, headers=headers, timeout=7)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
+            bloques = soup.find_all('div', class_='result__body')
+            
+            for b in bloques:
+                enlace_tag = b.find('a', class_='result__url')
+                snippet_tag = b.find('a', class_='result__snippet')
+                
+                if enlace_tag and snippet_tag:
+                    titulo = enlace_tag.text.strip()
+                    snippet = snippet_tag.text.strip()
+                    
+                    # Limpieza profunda de títulos basura de internet
+                    nombre = titulo.split("|")[0].split("-")[0].replace("www.", "").replace(".com", "").replace(".co", "").strip()
+                    nombre = re.sub(r'(Eventbrite|Boletas|Tickets|Compra|Descubre|Encuentra|Agenda)', '', nombre, flags=re.IGNORECASE).strip().title()
+                    
+                    # Intentar extraer un lugar físico real basado en palabras clave del texto descriptivo
+                    lugar = f"Ubicación en {ciudad_nombre}"
+                    palabras_lugar = ["Teatro", "Movistar Arena", "Estadio", "Coliseo", "Mall", "Centro Comercial", "Parque", "Auditorio", "Club", "Hall", "Plaza"]
+                    for p in palabras_lugar:
+                        match = re.search(r'(' + p + r'\s+[A-Za-z0-9áéíóúÁÉÍÓÚñÑ\s]+)', snippet, re.IGNORECASE)
+                        if match:
+                            lugar = match.group(1).split(".")[0].split(",")[0].strip().title()
+                            break
+                    
+                    if len(nombre) > 10 and not any(r['nombre'] == nombre for r in resultados_limpios):
+                        resultados_limpios.append({"nombre": nombre, "lugar": lugar})
+    except Exception:
+        pass
+    return resultados_limpios
+
 # BOTÓN DE EJECUCIÓN
 if st.button("Buscar Cartelera Real"):
     if not ciudad:
@@ -48,7 +88,15 @@ if st.button("Buscar Cartelera Real"):
         ciudad_limpia = ciudad.strip().title()
         ciudad_normalizada = ciudad.lower().strip().replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u")
         
-        with st.spinner(f"Rastreando la red en vivo para buscar eventos en {ciudad_limpia} ({rango_fecha.lower()})..."):
+        # Ajuste de palabras clave según la temporalidad seleccionada
+        if "1 mes" in rango_fecha:
+            tiempo_busqueda = "este mes cartelera programacion 2026"
+        elif "6 meses" in rango_fecha:
+            tiempo_busqueda = "proximos meses eventos agenda 2026"
+        else:
+            tiempo_busqueda = "este fin de semana agenda"
+
+        with st.spinner(f"Rastreando la red en vivo en {ciudad_limpia}..."):
             st.markdown("---")
             st.markdown(f"### 📍 Cartelera Cultural Encontrada para: {ciudad_limpia} ({rango_fecha})")
             
@@ -58,99 +106,64 @@ if st.button("Buscar Cartelera Real"):
                 st.info(st.session_state.anuncios_pauta)
                 st.markdown("---")
             
-            # SECCIÓN 1: CENTROS COMERCIALES
-            st.markdown("### 🏢 1. CENTROS COMERCIALES")
-            st.write(f"• **Feria de Emprendimiento y Marcas** | Lugar: Complejos comerciales principales de {ciudad_limpia} | Costo: Entrada libre.")
+            # --- SECCIÓN 1: CENTROS COMERCIALES (100% AUTOMÁTICO) ---
+            st.markdown("### 🏢 1. PLANES EN CENTROS COMERCIALES")
+            cc_encontrados = rastrear_categoria("eventos actividades feria centro comercial", ciudad_limpia, tiempo_busqueda)
             
-            # SECCIÓN 2: MASCOTAS Y PET-FRIENDLY
+            conteo_cc = 0
+            for cc in cc_encontrados:
+                st.write(f"• **Actividad:** {cc['nombre']}")
+                st.write(f"  * **Lugar:** {cc['lugar']} ({ciudad_limpia})")
+                st.caption(f"🔗 [Ver Horarios y Detalles de este Centro Comercial](https://www.google.com/search?q={urllib.parse.quote(cc['nombre'] + ' ' + ciudad_limpia)})")
+                st.markdown(" ")
+                conteo_cc += 1
+                if conteo_cc >= 3: break
+                
+            if conteo_cc == 0:
+                st.info(f"No se detectaron ferias comerciales masivas registradas en la red para esta fecha en {ciudad_limpia}.")
+
+            # --- SECCIÓN 2: MASCOTAS Y PET-FRIENDLY (100% AUTOMÁTICO) ---
             st.markdown("### 🐾 2. MASCOTAS Y PET-FRIENDLY")
-            st.write(f"• **Jornada de Recreación y Adopción Canina** | Lugar: Parques principales de la ciudad | Costo: 100% Gratuito.")
+            mascotas_encontrados = rastrear_categoria("evento canino adopcion mascotas pet friendly", ciudad_limpia, tiempo_busqueda)
             
-            # SECCIÓN 3: CONCIERTOS, TEATRO Y RUMBA
+            conteo_pet = 0
+            for pet in mascotas_encontrados:
+                st.write(f"• **Plan Mascota:** {pet['nombre']}")
+                st.write(f"  * **Lugar:** {pet['lugar']}")
+                st.caption(f"🔗 [Consultar requisitos de asistencia con tu mascota](https://www.google.com/search?q={urllib.parse.quote(pet['nombre'] + ' ' + ciudad_limpia)})")
+                st.markdown(" ")
+                conteo_pet += 1
+                if conteo_pet >= 3: break
+                
+            if conteo_pet == 0:
+                st.write(f"• **Plan Recomendado:** Caminata y Recreación en los Parques Principales de {ciudad_limpia}.")
+                st.caption(f"🐾 Zonas verdes habilitadas para ingreso libre con correa de forma permanente.")
+
+            # --- SECCIÓN 3: CONCIERTOS, TEATRO Y RUMBA (100% AUTOMÁTICO) ---
             st.markdown("### 🎸 3. CONCIERTOS, TEATRO Y RUMBA")
+            shows_encontrados = rastrear_categoria("site:eventbrite.com.co OR site:tuboleta.com OR site:eticket.co conciertos teatro festival", ciudad_limpia, tiempo_busqueda)
             
-            if "1 mes" in rango_fecha:
-                filtro_tiempo = "este mes cartelera programacion"
-            elif "6 meses" in rango_fecha:
-                filtro_tiempo = "proximos meses conciertos 2026"
-            else:
-                filtro_tiempo = "este fin de semana conciertos fechas"
-
-            # Modificamos la query para forzar resultados con ubicaciones y nombres específicos en los fragmentos
-            query = urllib.parse.quote(f"site:eventbrite.com.co OR site:tuboleta.com OR site:eticket.co \"{ciudad_limpia}\" {filtro_tiempo}")
-            url_busqueda_alt = f"https://html.duckduckgo.com/html/?q={query}"
-            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
-            
-            eventos_individualizados = []
-            try:
-                response = requests.get(url_busqueda_alt, headers=headers, timeout=8)
-                if response.status_code == 200:
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    # Extraer bloques completos de resultados para segmentar título y descripción del lugar
-                    bloques = soup.find_all('div', class_='result__body')
+            conteo_show = 0
+            for show in shows_encontrados:
+                # Aplicar los filtros de costo seleccionados por el usuario
+                if tipo_acceso == "GRATIS" and "gratis" not in show['nombre'].lower():
+                    continue
+                if tipo_acceso == "DE PAGA" and "gratis" in show['nombre'].lower():
+                    continue
                     
-                    for bloque in bloques:
-                        enlace_tag = bloque.find('a', class_='result__url')
-                        snippet_tag = bloque.find('a', class_='result__snippet')
-                        
-                        if enlace_tag and snippet_tag:
-                            texto_titulo = enlace_tag.text.strip()
-                            texto_snippet = snippet_tag.text.strip()
-                            
-                            # Validar que sea un evento legítimo
-                            if any(x in texto_titulo.lower() or x in texto_snippet.lower() for x in ["event", "concierto", "teatro", "boletas", "ticket", "festival", "presenta"]):
-                                
-                                # --- PROCESAMIENTO E INDIVIDUALIZACIÓN ---
-                                # Limpiar el título de la ticketera para hallar el nombre real del evento
-                                nombre_evento = texto_titulo.split("|")[0].split("-")[0].replace("www.", "").replace(".com", "").replace(".co", "").strip()
-                                nombre_evento = re.sub(r'(Eventbrite|Boletas|Tickets|Compra)', '', nombre_evento, flags=re.IGNORECASE).strip().title()
-                                
-                                # Intentar extraer el nombre del lugar/establecimiento desde el texto descriptivo (snippet)
-                                lugar_detectado = f"Teatros / Auditorios principales de {ciudad_limpia}"
-                                palabras_clave_lugar = ["Teatro", "Movistar Arena", "Estadio", "Movistar", "Arena", "Coliseo", "Chamorro", "Hall", "Centro de Eventos", "Club", "Parque", "Auditorio"]
-                                
-                                for palabra in palabras_clave_lugar:
-                                    match = re.search(r'(' + palabra + r'\s+[A-Za-z0-9áéíóúÁÉÍÓÚñÑ\s]+)', texto_snippet, re.IGNORECASE)
-                                    if match:
-                                        lugar_detectado = match.group(1).split(".")[0].split(",")[0].strip().title()
-                                        break
-                                
-                                # Evitar duplicados por nombre de evento
-                                if len(nombre_evento) > 8 and not any(e['nombre'] == nombre_evento for e in eventos_individualizados):
-                                    eventos_individualizados.append({
-                                        "nombre": nombre_evento,
-                                        "lugar": lugar_detectado
-                                    })
-            except Exception:
-                pass
-
-            conteo = 0
-            if eventos_individualizados:
-                for ev in eventos_individualizados:
-                    # Filtros de costo solicitados por el usuario
-                    if tipo_acceso == "GRATIS" and "gratis" not in ev['nombre'].lower():
-                        continue
-                    if tipo_acceso == "DE PAGA" and "gratis" in ev['nombre'].lower():
-                        continue
-                        
-                    # Impresión ultra-específica requerida
-                    st.write(f"• **Evento:** {ev['nombre']}")
-                    st.write(f"  * **Lugar:** {ev['lugar']} ({ciudad_limpia})")
-                    st.caption(f"🔗 [Verificar Fechas y Mapa de Ubicación](https://www.google.com/search?q={urllib.parse.quote(ev['nombre'] + ' ' + ev['lugar'])})")
-                    st.markdown(" ")
-                    conteo += 1
-                    if conteo >= 4: 
-                        break
-
-            if conteo == 0:
-                st.write(f"• **Evento:** Show Acústico de Temporada y Noche de Stand-up Comedia")
-                st.write(f"  * **Lugar:** Auditorios del Centro Comercial Principal ({ciudad_limpia})")
-                st.write(f"• **Evento:** Circuito Estacional de Teatro Independiente")
-                st.write(f"  * **Lugar:** Salas teatrales de la zona centro ({ciudad_limpia})")
+                st.write(f"• **Espectáculo:** {show['nombre']}")
+                st.write(f"  * **Lugar:** {show['lugar']}")
+                st.caption(f"🔗 [Comprar Boletas y Verificar Fechas Oficiales](https://www.google.com/search?q={urllib.parse.quote(show['nombre'] + ' ' + show['lugar'])})")
+                st.markdown(" ")
+                conteo_show += 1
+                if conteo_show >= 3: break
+                
+            if conteo_show == 0:
+                st.info(f"No encontramos eventos específicos de boletería con el filtro '{tipo_acceso}' en este momento.")
             
-            # SECCIÓN 4: CULTURA, ARTE Y CIUDAD
+            # SECCIÓN 4: CULTURA Y ARTE
             st.markdown("### 🎨 4. CULTURA, ARTE Y CIUDAD")
-            st.write(f"• **Exposiciones Artísticas y Museos Regionales** | Lugar: Casas de la cultura de {ciudad_limpia} | Costo: Acceso público permanente.")
+            st.write(f"• **Ruta de Museos y Casas de la Cultura Regional** | Lugar: Centros históricos de {ciudad_limpia} | Costo: Acceso público permanente.")
             
             st.markdown("---")
-            st.caption(f"⚙️ Sistema Cazador de Eventos Autónomo. Escaneo temporal ajustado a: {rango_fecha}.")
+            st.caption(f"⚙️ Sistema Cazador de Eventos Autónomo. Datos indexados y filtrados de forma independiente.")
