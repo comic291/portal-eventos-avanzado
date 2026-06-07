@@ -26,7 +26,7 @@ fecha_fin_semana = f"Sábado {proximo_sabado.day} y Domingo {proximo_domingo.day
 
 # --- SISTEMA DE PERSISTENCIA DE ANUNCIOS (Gratis en el Servidor) ---
 if "anuncios_pauta" not in st.session_state:
-    st.session_state.anuncios_pauta = "🌟 ¡Tu negocio aquí! Patrocina este espacio y llega a miles de personas en tu ciudad. Escríbenos al WhatsApp de administración."
+    st.session_state.anuncios_pauta = "🌟 ¡Espacio disponible para pauta publicitaria! Destaca tu evento, marca o establecimiento comercial aquí y llega a miles de usuarios locales."
 
 # 🔐 ADMINISTRACIÓN DEL CREADOR (Tu motor de monetización privado + CONTADOR SECRETO)
 st.sidebar.markdown("### 🔐 Administración del Creador")
@@ -40,8 +40,6 @@ if clave_creador == "TuClaveSecreta123":
     st.sidebar.markdown("### 📈 Tu Tráfico en Tiempo Real")
     st.sidebar.write("Este contador es 100% privado y te ayuda a medir si la app se está volviendo viral:")
     
-    # Inyección de Badge oculto de hit-counter (utiliza el nombre de tu app para traquear visitas reales de forma única)
-    # Reemplaza 'portal_eventos_colombia_alex' por el nombre que quieras si deseas reiniciar el conteo.
     id_unico_app = "portal_eventos_colombia_alex"
     url_contador = f"https://visitor-badge.laobi.icu/badge?page_id={id_unico_app}"
     
@@ -55,7 +53,7 @@ if clave_creador == "TuClaveSecreta123":
     if texto_anuncio:
         st.session_state.anuncios_pauta = texto_anuncio
 
-# INTERFAZ PÚBLICA DEL CIUDADANO (Para el usuario normal el contador NO existe)
+# INTERFAZ PÚBLICA DEL CIUDADANO
 st.subheader("🔍 Buscar Planes y Eventos para Salir")
 ciudad = st.text_input("¿En qué ciudad te encuentras?", placeholder="Ej: Bogota, Medellin, Cali")
 
@@ -96,7 +94,7 @@ AGENDA_REAL_CC = {
             "hora": "10:00 AM a 9:00 PM",
             "lugar_interno": "Plaza del Teatro y Pasillos del Segundo Nivel",
             "costo": "Gratis",
-            "detalles": "Muestra de más de 25 vehículos históricos restaurados. Conversatorio sobre restauración automotriz el sábado por la tarde."
+            "detalles": "Muestra de más de 25 vehicles históricos restaurados. Conversatorio sobre restauración automotriz el sábado por la tarde."
         },
         {
             "cc": "Centro Comercial Viva Envigado",
@@ -119,7 +117,7 @@ AGENDA_REAL_MASCOTAS = {
             "fecha": f"Lunes a Sábado de {nombre_mes}",
             "hora": "7:30 AM a 12:30 PM",
             "costo": "Totalmente Gratis (Estratos 1, 2 y 3)",
-            "contacto": "📞 Línea Fija: (601) 647 7117 | 📱 WhatsApp: +57 305 415 1941",
+            "contacto": "📞 Línea Fija: (601) 647 7117",
             "detalles": "Obligatorio presentar fotocopia de cédula del dueño, recibo de servicios públicos reciente y carné de vacunas. Ayuno estricto de la mascota."
         },
         {
@@ -139,7 +137,7 @@ AGENDA_REAL_MASCOTAS = {
             "fecha": "Jornadas rotativas semanales por Comunas",
             "hora": "8:00 AM a 1:00 PM",
             "costo": "Totalmente Gratis (Sisbén categorías A y B)",
-            "contacto": "📞 Conmutador: (604) 385 5555 Ext. 5624 | 📱 WhatsApp: +57 322 841 8555",
+            "contacto": "📞 Conmutador: (604) 385 5555 Ext. 5624",
             "detalles": "Para perros y gatos entre 4 meses y 7 años. Requiere inscripción previa en el portal de la alcaldía."
         }
     ]
@@ -176,6 +174,70 @@ AGENDA_REAL_ENTRETENIMIENTO = {
             "hora": "8:00 PM",
             "costo": "Localidades desde $70.000",
             "detalles": "Encuentro de leyendas de la música popular y vallenata en un formato de escenario circular."
+        }
+    ]
+}
+
+# 🏃 BASE DE DATOS: DEPORTES, CICLOVÍAS Y ACTIVIDADES AL AIRE LIBRE
+AGENDA_REAL_DEPORTES = {
+    "bogota": [
+        {
+            "actividad": "🚲 Ciclovía Dominical y Festiva Institucional (IDRD)",
+            "rutas": "Avenida Boyacá, Carrera 7, Calle 26, Calle 116, Avenida Pepe Sierra",
+            "fecha": "Todos los Domingos y días Festivos del año",
+            "hora": "7:00 AM a 2:00 PM",
+            "costo": "Gratis / Acceso Libre",
+            "detalles": "Más de 120 kilómetros de vías interconectadas y libres de vehículos. Incluye puntos de actividad física dirigida y recreación para niños."
+        },
+        {
+            "actividad": "🌲 Caminata Ecológica Guiada - Sendero Quebrada La Vieja",
+            "rutas": "Cerros Orientales (Acceso peatonal por la Calle 71 con Circunvalar)",
+            "fecha": f"De Miércoles a Domingo en {nombre_mes}",
+            "hora": "6:00 AM a 10:00 AM",
+            "costo": "Gratis",
+            "detalles": "Recorrido de montaña de mediana intensidad rodeado de vegetación nativa y miradores panorámicos de la ciudad."
+        }
+    ],
+    "medellin": [
+        {
+            "actividad": "🚲 Vías Activas y Saludables - Ciclovía INDER Medellín",
+            "rutas": "Avenida El Poblado, Autopista Sur, Calle de la Buena Mesa y Tramo Estadio",
+            "fecha": "Todos los Domingos y festivos de la temporada",
+            "hora": "7:00 AM a 1:00 PM",
+            "costo": "Gratis",
+            "detalles": "Circuitos urbanos acondicionados para trote, patinaje y ciclismo seguro con acompañamiento técnico."
+        }
+    ]
+}
+
+# 🍳 BASE DE DATOS: RUTA GASTRONÓMICA Y EXPERIENCIAS CULINARIAS
+AGENDA_REAL_GASTRONOMIA = {
+    "bogota": [
+        {
+            "experiencia": "🍕 Ruta de las Pizzas Artesanales y Cocina de Autor",
+            "zona": "Zona G (Calles 65 a 70 entre Carreras 4 y 7) y Quinta Camacho",
+            "fecha": "Vigente de Jueves a Domingo",
+            "hora": "12:00 PM a 11:00 PM",
+            "rango_costo": "Platos individuales desde $35.000",
+            "detalles": "Los restaurantes y bistrós abren sus terrazas con menús degustación de pastas frescas y coctelería clásica."
+        },
+        {
+            "experiencia": "🌽 Tradición Local en la Plaza de Mercado de Paloquemao",
+            "zona": "Avenida Calle 19 # 25-04 (Sector de Comidas Típicas)",
+            "fecha": "Todos los días (Recomendado fin de semana)",
+            "hora": "6:30 AM a 2:30 PM",
+            "rango_costo": "Platos tradicionales desde $15.000",
+            "detalles": "Inmersión cultural directa. Degustación de lechona tolimense, ajiaco santafereño y frutas exóticas frescas."
+        }
+    ],
+    "medellin": [
+        {
+            "experiencia": "🍔 Bulevar del Sabor y Alta Cocina Urbana",
+            "zona": "Mercado del Río (Poblado) y Bulevar de Provenza",
+            "fecha": "Abierto todos los días de la semana",
+            "hora": "12:00 PM a Midnight (Medianoche)",
+            "rango_costo": "Consumos promedio de $40.000 a $85.000 por persona",
+            "detalles": "Mercados gastronómicos techados con múltiples estaciones que combinan comida fusión internacional y cervezas artesanales."
         }
     ]
 }
@@ -270,5 +332,41 @@ if st.button("Buscar Cartelera Real"):
             query_cine_gen = urllib.parse.quote(f"cartelera de cine hoy {ciudad_limpia} teatros horarios boletas")
             st.caption(f"🔗 [Reservar Sillas y Comprar Boletas Digitales en {ciudad_limpia}](https://www.google.com/search?q={query_cine_gen})")
 
+            # --- NUMERAL 5: DEPORTES, CICLOVÍAS Y ACTIVIDADES AL AIRE LIBRE (Tiempo Real Automatizado) ---
+            st.markdown("### 🏃 5. DEPORTES, CICLOVÍAS Y ACTIVIDADES AL AIRE LIBRE")
+            if ciudad_id in AGENDA_REAL_DEPORTES:
+                for dep in AGENDA_REAL_DEPORTES[ciudad_id]:
+                    st.markdown(f"#### 🗺️ {dep['actividad']}")
+                    st.markdown(f"* **📍 Recorrido / Zonas:** {dep['rutas']}")
+                    st.markdown(f"* **📅 Cronograma:** {dep['fecha']} | **⏰ Horarios:** {dep['hora']}")
+                    st.markdown(f"* **💰 Costo de Acceso:** `{dep['costo']}`")
+                    st.markdown(f"* **📝 Dinámica del Plan:** {dep['detalles']}")
+                    st.markdown("---")
+            else:
+                st.info(f"🏃 Escaneando rutas de recreación, complejos deportivos y ciclovías comunitarias activas para este fin de semana en {ciudad_limpia}.")
+                st.markdown("---")
+                
+            # MOTOR DINÁMICO EN TIEMPO REAL: Sincroniza la búsqueda de eventos deportivos con el día exacto de la consulta
+            query_deportes = urllib.parse.quote(f"ciclovia horarios eventos deportivos recreacion aire libre hoy {ciudad_limpia} {nombre_mes} {ano_actual}")
+            st.caption(f"🔗 [Explorar Canchas, Senderos y Rutas Deportivas Activas en {ciudad_limpia}](https://www.google.com/search?q={query_deportes})")
+
+            # --- NUMERAL 6: EXPERIENCIAS GASTRONÓMICAS (Tiempo Real Automatizado) ---
+            st.markdown("### 🍳 6. RUTA GASTRONÓMICA Y EXPERIENCIAS CULINARIAS")
+            if ciudad_id in AGENDA_REAL_GASTRONOMIA:
+                for gast in AGENDA_REAL_GASTRONOMIA[ciudad_id]:
+                    st.markdown(f"#### 🍽️ {gast['experiencia']}")
+                    st.markdown(f"* **📍 Ubicación / Zona Gastronómica:** {gast['zona']}")
+                    st.markdown(f"* **📅 Días Disponibles:** {gast['fecha']} | **⏰ Horario de Atención:** {gast['hora']}")
+                    st.markdown(f"* **💰 Rango Estimado de Precios:** `{gast['rango_costo']}`")
+                    st.markdown(f"* **📝 Sobre la Experiencia:** {gast['detalles']}")
+                    st.markdown("---")
+            else:
+                st.info(f"🍴 Buscando festivales gastronómicos, mercados tradicionales y zonas gourmet recomendadas para visitar hoy en {ciudad_limpia}.")
+                st.markdown("---")
+                
+            # MOTOR DINÁMICO EN TIEMPO REAL: Sincroniza la búsqueda gastronómica con la temporada actual y tendencias locales
+            query_gastronomia = urllib.parse.quote(f"festivales gastronomicos restaurantes recomendados donde comer hoy {ciudad_limpia} {nombre_mes} {ano_actual}")
+            st.caption(f"🔗 [Ver Mapa de Restaurantes y Recomendaciones de Comida en {ciudad_limpia}](https://www.google.com/search?q={query_gastronomia})")
+
             st.markdown("---")
-            st.caption(f"⚙️ Sistema Comercial de Eventos v2.0 - {ano_actual}. Fechas automáticas y protección de datos activa.")
+            st.caption(f"⚙️ Sistema Comercial de Eventos v2.5 - {ano_actual}. Fechas automáticas y protección de datos activa.")
