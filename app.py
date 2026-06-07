@@ -102,7 +102,7 @@ AGENDA_REAL_CC = {
     ]
 }
 
-# 🐾 BASE DE DATOS MEJORADA CON JORNADAS DE VACUNACIÓN, ESTERILIZACIÓN GRATUITA Y PLANES PET-FRIENDLY (2026)
+# 🐾 BASE DE DATOS ENRIQUECIDA CON CANALES DE CONTACTO DIRECTO (TELÉFONOS / WHATSAPP / LÍNEAS DE ATENCIÓN)
 AGENDA_REAL_MASCOTAS = {
     "bogota": [
         {
@@ -111,6 +111,7 @@ AGENDA_REAL_MASCOTAS = {
             "fecha": "Lunes a Sábado (Con agenda previa virtual / Unidades Móviles en barrios)",
             "hora": "7:30 AM a 12:30 PM",
             "costo": "Totalmente Gratis (Estratos 1, 2 y 3)",
+            "contacto": "📞 Línea Fija: (601) 647 7117 | 📱 WhatsApp de Información Especializada: +57 305 415 1941",
             "detalles": "Requisitos obligatorios: Fotocopia de la cédula del dueño, recibo público estrato 1, 2 o 3 no mayor a 2 meses, y carné de vacunas al día. El animal debe ir en ayuno estricto de 8 horas de sólidos y 3 de líquidos."
         },
         {
@@ -119,6 +120,7 @@ AGENDA_REAL_MASCOTAS = {
             "fecha": "De Lunes a Domingo (Atención Continua 2026)",
             "hora": "9:00 AM a 3:30 PM",
             "costo": "Totalmente Gratis",
+            "contacto": "📞 Línea de Atención Distrital: Marcando el 195 (Información de Subredes)",
             "detalles": "Inmunización permanente contra el virus de la rabia para perros y gatos desde los 3 meses de edad. Obligatorio presentar el carné de vacunación anterior si lo posee."
         },
         {
@@ -127,6 +129,7 @@ AGENDA_REAL_MASCOTAS = {
             "fecha": "Domingo 14 de Junio, 2026",
             "hora": "10:00 AM a 5:00 PM",
             "costo": "Entrada Libre",
+            "contacto": "📞 Línea de Servicio al Cliente CC: (601) 745 4242",
             "detalles": "Pasarela de adopción con fundaciones aliadas, valoración médico-veterinaria preventiva sin costo, charlas de obediencia canina y feria de emprendedores."
         }
     ],
@@ -134,18 +137,20 @@ AGENDA_REAL_MASCOTAS = {
         {
             "tematica": "🩺 Programa de Esterilización Gratuito 'Centro de Bienestar La Perla'",
             "lugar": "Sedes Sanitarias Comunitarias y Quirófanos Móviles de la Alcaldía de Medellín",
-            "fecha": "Jornadas rotativas semanales en Comunas (Inscripción previa en la línea oficial)",
+            "fecha": "Jornadas rotativas semanales en Comunas (Inscripción previa)",
             "hora": "8:00 AM a 1:00 PM",
             "costo": "Totalmente Gratis (Sisbén categorías A y B / Estratos 1, 2 y 3)",
+            "contacto": "📞 Conmutador de la Alcaldía: (604) 385 5555 Ext. 5624 | 📱 WhatsApp de Atención Ciudadana: +57 322 841 8555",
             "detalles": "Cirugías de castración para perros y gatos. Los animales deben tener entre 4 meses y 7 años, excelente estado de salud, y el propietario debe residir en Medellín aportando su cuenta de servicios."
         },
         {
-            "tematica": "🐱 Puntos Móviles de Vacunación Antirrábica y Desparasitación",
-            "lugar": "Parque de El Poblado y Parques de Comunas (Puntos Móviles de la Secretaría de Salud)",
-            "fecha": "Viernes y Sábados programados",
-            "hora": "9:00 AM a 2:30 PM",
-            "costo": "Gratis",
-            "detalles": "Campaña oficial de control de la rabia. Aplicación de biológicos y entrega gratuita de antiparasitarios internos para cachorros y adultos."
+            "tematica": "🐾 Gran Carrera y Caminata recreativa 'Pet-Run Medellín 2026'",
+            "lugar": "Alrededores del Estadio Atanasio Girardot (Salida Puerta Norte)",
+            "fecha": "Domingo 14 de Junio, 2026",
+            "hora": "7:00 AM a 10:30 AM",
+            "costo": "Inscripción Libre / Puntos de hidratación gratis",
+            "contacto": "📞 INDER Medellín: (604) 369 9000",
+            "detalles": "Recorrido recreativo de 2K y 4K para dueños y sus peludos. Cuenta con asistencia médica veterinaria de urgencias a lo largo del circuito, piscina de pelotas para mascotas al finalizar y premios."
         }
     ],
     "cali": [
@@ -155,15 +160,8 @@ AGENDA_REAL_MASCOTAS = {
             "fecha": "Agendamiento continuo semanal de turnos presenciales",
             "hora": "7:30 AM a 11:30 AM",
             "costo": "Gratis",
+            "contacto": "📞 Centro de Zoonosis Fijo: (602) 486 5585 | 📞 Secretaría de Salud de Cali: (602) 554 2525",
             "detalles": "Procedimientos quirúrgicos ambulatorios dirigidos a caninos y felinos mestizos. Requisito llevar cobija para el postoperatorio y que la mascota se encuentre limpia y clínicamente sana."
-        },
-        {
-            "tematica": "🩺 Jornada de Salud, Vacunación Oficial Contra la Rabia",
-            "lugar": "Parque Longchamp (Barrio El Ingenio, Zona Verde Principal) y Puntos de Red de Salud",
-            "fecha": "Sábado 13 de Junio, 2026",
-            "hora": "8:00 AM a 1:00 PM",
-            "costo": "Gratis",
-            "detalles": "Vacunación oficial obligatoria del año 2026. Revisión de constantes biológicas básicas por médicos veterinarios institucionales."
         }
     ]
 }
@@ -210,7 +208,7 @@ if st.button("Buscar Cartelera Real"):
                 st.markdown(f"* **📝 Detalles del Plan:** Espacio comercial dispuesto para apoyar marcas de la región, muestras gastronómicas típicas y música en vivo.")
                 st.markdown("---")
 
-            # --- 🐾 NUMERAL 2: MASCOTAS Y PET-FRIENDLY (MEJORADO CON VACUNACIÓN Y ESTERILIZACIÓN GRATIS) ---
+            # --- 🐾 NUMERAL 2: MASCOTAS Y PET-FRIENDLY (MEJORADO CON CANALES DE CONTACTO DIRECTO) ---
             st.markdown("### 🐾 2. MASCOTAS Y PET-FRIENDLY")
             
             if ciudad_id in AGENDA_REAL_MASCOTAS:
@@ -223,6 +221,7 @@ if st.button("Buscar Cartelera Real"):
                     st.markdown(f"* **📅 Fecha / Cronograma:** {pet['fecha']}")
                     st.markdown(f"* **⏰ Horario de Atención:** {pet['hora']}")
                     st.markdown(f"* **💰 Costo del Servicio:** {pet['costo']}")
+                    st.markdown(f"* **📞 Líneas de Contacto e Información:** `{pet['contacto']}`")
                     st.markdown(f"* **📝 Requisitos y Detalles:** {pet['detalles']}")
                     st.markdown("---")
             else:
@@ -234,7 +233,8 @@ if st.button("Buscar Cartelera Real"):
                 st.markdown(f"* **📅 Fecha / Cronograma:** Sábados continuos de la temporada")
                 st.markdown(f"* **⏰ Horario de Atención:** 8:30 AM a 1:00 PM")
                 st.markdown(f"* **💰 Costo del Servicio:** 100% Gratis")
-                st.markdown(f"* **📝 Requisitos y Detalles:** Dirigido a perros y gatos sanos desde los 3 meses. Es necesario llevar el documento de identidad del cuidador mayor de edad y asegurar la contención física del animal (traílla o guacal).")
+                st.markdown(f"* **📞 Líneas de Contacto e Información:** `📞 Marcar directamente a la línea telefónica de la Alcaldía Local de {ciudad_limpia} (Secretaría de Salud)`")
+                st.markdown(f"* **📝 Requisitos y Detalles:** Dirigido a perros y gatos sanos desde los 3 meses. Es necesario presentar el documento de identidad del cuidador mayor de edad.")
                 st.markdown("---")
 
             # --- SECCIÓN 3: CONCIERTOS Y TEATROS ---
