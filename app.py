@@ -10,29 +10,26 @@ st.set_page_config(page_title="Portal de Eventos Real-Time Colombia", page_icon=
 st.title("🎉 Portal Comercial de Eventos y Agenda Cultural")
 st.write("Consulta la cartelera de eventos en tiempo real de forma gratuita.")
 
-# Manejo del estado (st.session_state) para que tus anuncios no se borren al buscar
 if "anuncios_pauta" not in st.session_state:
     st.session_state.anuncios_pauta = "Ninguno por ahora"
 
-# 🔐 TU PESTAÑA OCULTA DE CREADOR (Tu motor de monetización privada)
+# 🔐 TU PESTAÑA OCULTA DE CREADOR
 st.sidebar.markdown("### 🔐 Administración del Creador")
 clave_creador = st.sidebar.text_input("Contraseña de Creador:", type="password")
 
-if clave_creador == "TuClaveSecreta123": # Tu contraseña privada para ingresar anuncios
+if clave_creador == "TuClaveSecreta123":
     st.sidebar.success("¡Acceso concedido!")
     texto_anuncio = st.sidebar.text_area(
         "Ingresa aquí los eventos pagos que te patrocinen:",
         value=st.session_state.anuncios_pauta if st.session_state.anuncios_pauta != "Ninguno por ahora" else "",
-        placeholder="Ej: ⭐ [ANUNCIO] Gran Festival Gastronómico en el Parque Principal, Sábado 4PM, Entrada Libre."
     )
     if texto_anuncio:
         st.session_state.anuncios_pauta = texto_anuncio
 
-# INTERFAZ PÚBLICA DEL CIUDADANO (Buscador Gratis)
+# INTERFAZ PÚBLICA DEL CIUDADANO
 st.subheader("🔍 Buscar Planes y Eventos para Salir")
 ciudad = st.text_input("¿En qué ciudad te encuentras?", placeholder="Ej: Bogota, Medellin, Cali")
 
-# Selección de rango de tiempo para el rastreador
 rango_fecha = st.selectbox(
     "¿Para cuándo buscas plan?", 
     ["Este fin de semana", "Próximos 30 días (1 mes)", "Próximos 6 meses"]
@@ -40,18 +37,24 @@ rango_fecha = st.selectbox(
 
 tipo_acceso = st.selectbox("Filtro de costo:", ["AMBOS", "GRATIS", "DE PAGA"])
 
-# FUNCIÓN INTERNA DE RASTREO Y LIMPIEZA AUTOMÁTICA
-def rastrear_categoria(termino_busqueda, ciudad_nombre, filtro_tiempo):
+# MOTOR DE RASTREO CON SEGUIMIENTO VISUAL ABIERTO
+def rastrear_categoria_visible(termino_busqueda, ciudad_nombre, filtro_tiempo):
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
-    query = urllib.parse.quote(f"{termino_busqueda} en {ciudad_nombre} {filtro_tiempo}")
+    query = urllib.parse.quote(f"{termino_busqueda} {ciudad_nombre} {filtro_tiempo}")
     url = f"https://html.duckduckgo.com/html/?q={query}"
+    
+    # Esto aparecerá en la consola interna para demostrar que el código está viajando a la red
+    print(f"[RASTREADOR] Buscando en internet: {url}")
     
     resultados_limpios = []
     try:
-        response = requests.get(url, headers=headers, timeout=7)
+        response = requests.get(url, headers=headers, timeout=8)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
             bloques = soup.find_all('div', class_='result__body')
+            
+            # Alerta interna de diagnóstico en la interfaz
+            st.caption(f"✨ Red consultada con éxito para '{termino_busqueda}'. Analizando {len(bloques)} fragmentos web encontrados...")
             
             for b in bloques:
                 enlace_tag = b.find('a', class_='result__url')
@@ -61,23 +64,21 @@ def rastrear_categoria(termino_busqueda, ciudad_nombre, filtro_tiempo):
                     titulo = enlace_tag.text.strip()
                     snippet = snippet_tag.text.strip()
                     
-                    # Limpieza profunda de títulos basura de internet
                     nombre = titulo.split("|")[0].split("-")[0].replace("www.", "").replace(".com", "").replace(".co", "").strip()
-                    nombre = re.sub(r'(Eventbrite|Boletas|Tickets|Compra|Descubre|Encuentra|Agenda)', '', nombre, flags=re.IGNORECASE).strip().title()
+                    nombre = re.sub(r'(Eventbrite|Boletas|Tickets|Compra|Descubre|Encuentra|Agenda|Sitio Oficial)', '', nombre, flags=re.IGNORECASE).strip().title()
                     
-                    # Intentar extraer un lugar físico real basado en palabras clave del texto descriptivo
-                    lugar = f"Ubicación en {ciudad_nombre}"
-                    palabras_lugar = ["Teatro", "Movistar Arena", "Estadio", "Coliseo", "Mall", "Centro Comercial", "Parque", "Auditorio", "Club", "Hall", "Plaza"]
+                    lugar = f"Establecimiento en {ciudad_nombre}"
+                    palabras_lugar = ["Teatro", "Arena", "Estadio", "Coliseo", "Mall", "Centro Comercial", "Parque", "Auditorio", "Club", "Plaza", "Discoteca"]
                     for p in palabras_lugar:
                         match = re.search(r'(' + p + r'\s+[A-Za-z0-9áéíóúÁÉÍÓÚñÑ\s]+)', snippet, re.IGNORECASE)
                         if match:
                             lugar = match.group(1).split(".")[0].split(",")[0].strip().title()
                             break
                     
-                    if len(nombre) > 10 and not any(r['nombre'] == nombre for r in resultados_limpios):
+                    if len(nombre) > 6 and not any(r['nombre'] == nombre for r in resultados_limpios):
                         resultados_limpios.append({"nombre": nombre, "lugar": lugar})
-    except Exception:
-        pass
+    except Exception as e:
+        st.caption(f"⚠️ Error de red temporal al intentar conectar con el índice: {e}")
     return resultados_limpios
 
 # BOTÓN DE EJECUCIÓN
@@ -86,29 +87,27 @@ if st.button("Buscar Cartelera Real"):
         st.warning("Por favor, ingresa la ciudad para realizar la búsqueda.")
     else:
         ciudad_limpia = ciudad.strip().title()
-        ciudad_normalizada = ciudad.lower().strip().replace("á","a").replace("é","e").replace("í","i").replace("ó","o").replace("ú","u")
         
-        # Ajuste de palabras clave según la temporalidad seleccionada
         if "1 mes" in rango_fecha:
-            tiempo_busqueda = "este mes cartelera programacion 2026"
+            tiempo_busqueda = "conciertos eventos cartelera"
         elif "6 meses" in rango_fecha:
-            tiempo_busqueda = "proximos meses eventos agenda 2026"
+            tiempo_busqueda = "programacion conciertos 2026"
         else:
-            tiempo_busqueda = "este fin de semana agenda"
+            tiempo_busqueda = "eventos agenda"
 
-        with st.spinner(f"Rastreando la red en vivo en {ciudad_limpia}..."):
+        with st.spinner(f"Abriendo canales de red y escaneando datos para {ciudad_limpia}..."):
             st.markdown("---")
             st.markdown(f"### 📍 Cartelera Cultural Encontrada para: {ciudad_limpia} ({rango_fecha})")
             
-            # 1. INYECCIÓN PRIORITARIA DE TU ANUNCIO PAGO (Monetización)
+            # INYECCIÓN DEL ANUNCIO PRIVADO
             if st.session_state.anuncios_pauta != "Ninguno por ahora" and st.session_state.anuncios_pauta.strip() != "":
                 st.markdown("### ⭐ ANUNCIOS DESTACADOS - RECOMENDADOS")
                 st.info(st.session_state.anuncios_pauta)
                 st.markdown("---")
             
-            # --- SECCIÓN 1: CENTROS COMERCIALES (100% AUTOMÁTICO) ---
+            # --- SECCIÓN 1: CENTROS COMERCIALES ---
             st.markdown("### 🏢 1. PLANES EN CENTROS COMERCIALES")
-            cc_encontrados = rastrear_categoria("eventos actividades feria centro comercial", ciudad_limpia, tiempo_busqueda)
+            cc_encontrados = rastrear_categoria_visible("centro comercial feria actividades", ciudad_limpia, tiempo_busqueda)
             
             conteo_cc = 0
             for cc in cc_encontrados:
@@ -120,11 +119,11 @@ if st.button("Buscar Cartelera Real"):
                 if conteo_cc >= 3: break
                 
             if conteo_cc == 0:
-                st.info(f"No se detectaron ferias comerciales masivas registradas en la red para esta fecha en {ciudad_limpia}.")
+                st.info(f"El rastreador no detectó páginas de centros comerciales con eventos explícitos indexados hoy para {ciudad_limpia}.")
 
-            # --- SECCIÓN 2: MASCOTAS Y PET-FRIENDLY (100% AUTOMÁTICO) ---
+            # --- SECCIÓN 2: MASCOTAS ---
             st.markdown("### 🐾 2. MASCOTAS Y PET-FRIENDLY")
-            mascotas_encontrados = rastrear_categoria("evento canino adopcion mascotas pet friendly", ciudad_limpia, tiempo_busqueda)
+            mascotas_encontrados = rastrear_categoria_visible("mascotas canino adopcion", ciudad_limpia, tiempo_busqueda)
             
             conteo_pet = 0
             for pet in mascotas_encontrados:
@@ -136,16 +135,15 @@ if st.button("Buscar Cartelera Real"):
                 if conteo_pet >= 3: break
                 
             if conteo_pet == 0:
-                st.write(f"• **Plan Recomendado:** Caminata y Recreación en los Parques Principales de {ciudad_limpia}.")
-                st.caption(f"🐾 Zonas verdes habilitadas para ingreso libre con correa de forma permanente.")
+                st.write(f"• **Plan Recomendado:** Actividades libres y recreación en los Parques Principales de {ciudad_limpia}.")
+                st.caption(f"🐾 Espacios verdes abiertos para caminatas familiares de forma permanente.")
 
-            # --- SECCIÓN 3: CONCIERTOS, TEATRO Y RUMBA (100% AUTOMÁTICO) ---
+            # --- SECCIÓN 3: CONCIERTOS, TEATRO Y RUMBA ---
             st.markdown("### 🎸 3. CONCIERTOS, TEATRO Y RUMBA")
-            shows_encontrados = rastrear_categoria("site:eventbrite.com.co OR site:tuboleta.com OR site:eticket.co conciertos teatro festival", ciudad_limpia, tiempo_busqueda)
+            shows_encontrados = rastrear_categoria_visible("concierto teatro boletas ticket", ciudad_limpia, tiempo_busqueda)
             
             conteo_show = 0
             for show in shows_encontrados:
-                # Aplicar los filtros de costo seleccionados por el usuario
                 if tipo_acceso == "GRATIS" and "gratis" not in show['nombre'].lower():
                     continue
                 if tipo_acceso == "DE PAGA" and "gratis" in show['nombre'].lower():
@@ -159,11 +157,11 @@ if st.button("Buscar Cartelera Real"):
                 if conteo_show >= 3: break
                 
             if conteo_show == 0:
-                st.info(f"No encontramos eventos específicos de boletería con el filtro '{tipo_acceso}' en este momento.")
+                st.info(f"Búsqueda finalizada. No se aislaron eventos específicos de boletería bajo el filtro '{tipo_acceso}' en las páginas principales analizadas.")
             
-            # SECCIÓN 4: CULTURA Y ARTE
+            # SECCIÓN 4
             st.markdown("### 🎨 4. CULTURA, ARTE Y CIUDAD")
             st.write(f"• **Ruta de Museos y Casas de la Cultura Regional** | Lugar: Centros históricos de {ciudad_limpia} | Costo: Acceso público permanente.")
             
             st.markdown("---")
-            st.caption(f"⚙️ Sistema Cazador de Eventos Autónomo. Datos indexados y filtrados de forma independiente.")
+            st.caption("⚙️ Sistema Cazador de Eventos Autónomo. Monitor de diagnóstico activo.")
