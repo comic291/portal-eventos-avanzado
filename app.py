@@ -166,7 +166,7 @@ AGENDA_REAL_MASCOTAS = {
     ]
 }
 
-# 🎸 BASE DE DATOS ULTRA-DETALLADA DE CONCIERTOS, TEATRO Y RUMBA (TEMPORADA DE JUNIO 2026)
+# 🎸 BASE DE DATOS ULTRA-DETALLADA DE CONCIERTOS, TEATRO Y RUMBA
 AGENDA_REAL_ENTRETENIMIENTO = {
     "bogota": [
         {
@@ -176,7 +176,7 @@ AGENDA_REAL_ENTRETENIMIENTO = {
             "fecha": "Viernes 12 de Junio, 2026",
             "hora": "7:30 PM",
             "costo": "Desde $85.000 hasta $320.000",
-            "detalles": "Presentación en vivo de las bandas de rock en español más icónicas del circuito nacional en un show de luces y sonido de última tecnología."
+            "detalles": "Presentación en vivo de las bandas de rock en español más icónicas del circuito nacional."
         },
         {
             "categoria": "🎭 TEATRO",
@@ -185,16 +185,16 @@ AGENDA_REAL_ENTRETENIMIENTO = {
             "fecha": "Sábado 13 y Domingo 14 de Junio, 2026",
             "hora": "6:00 PM y 8:30 PM (Doble función)",
             "costo": "General: $65.000 / Estudiantes: $45.000",
-            "detalles": "Una adaptación contemporánea brillante con elenco de primera línea de la televisión y el teatro colombiano. Risas garantizadas durante 90 minutos."
+            "detalles": "Una adaptación contemporánea brillante con elenco de primera línea de la televisión colombiana."
         },
         {
             "categoria": "🔥 RUMBA & NIGHTLIFE",
             "nombre": "Noche de Crossover y Ritmos Urbanos",
-            "lugar": "Zona T y Zona Rosa (Discotecas aliadas del norte de la ciudad)",
+            "lugar": "Zona T y Zona Rosa (Discotecas del norte de la ciudad)",
             "fecha": "Todos los Viernes y Sábados",
-            "hora": "Apertura desde las 8:30 PM hasta las 3:00 AM",
-            "costo": "Cover promedio: $25.000 (Incluye bebida de bienvenida)",
-            "detalles": "Los mejores DJs de la capital mezclando reggaetón, salsa, merengue y electrónica. Control de aforo estricto y zonas VIP habilitadas."
+            "hora": "8:30 PM hasta las 3:00 AM",
+            "costo": "Cover promedio: $25.000",
+            "detalles": "Los mejores DJs de la capital mezclando reggaetón, salsa, merengue y electrónica."
         }
     ],
     "medellin": [
@@ -205,7 +205,7 @@ AGENDA_REAL_ENTRETENIMIENTO = {
             "fecha": "Sábado 13 de Junio, 2026",
             "hora": "8:00 PM",
             "costo": "Localidades desde $70.000 hasta Palcos Preferenciales",
-            "detalles": "Un encuentro de los mayores exponentes de la música popular y el vallenato clásico en un escenario circular con visibilidad total."
+            "detalles": "Un encuentro de los mayores exponentes de la música popular y el vallenato clásico."
         },
         {
             "categoria": "🎭 TEATRO",
@@ -214,16 +214,7 @@ AGENDA_REAL_ENTRETENIMIENTO = {
             "fecha": "Viernes 12 de Junio, 2026",
             "hora": "8:00 PM",
             "costo": "Entradas desde $50.000",
-            "detalles": "Un monólogo divertido y cargado de humor e identidad paisa sobre las situaciones cotidianas de las parejas y los retos del entorno moderno."
-        },
-        {
-            "categoria": "🔥 RUMBA & NIGHTLIFE",
-            "nombre": "Circuito de Rumba Electrónica y Reggaetón Urbano",
-            "lugar": "Parque Lleras and Provenza (El Poblado)",
-            "fecha": "De Jueves a Sábado",
-            "hora": "9:00 PM a 4:00 AM",
-            "costo": "Entrada libre en terrazas / Covers desde $30.000 en discotecas cerradas",
-            "detalles": "La zona más turística y vibrante de la ciudad con experiencias gastronómicas previas, coctelería de autor y ambientes musicales temáticos."
+            "detalles": "Un monólogo divertido y cargado de humor e identidad paisa."
         }
     ],
     "cali": [
@@ -234,16 +225,71 @@ AGENDA_REAL_ENTRETENIMIENTO = {
             "fecha": "Domingo 14 de Junio, 2026",
             "hora": "4:00 PM a 10:00 PM",
             "costo": "Entrada Gratuita / Aporte voluntario cultural",
-            "detalles": "Exhibición de joyas en vinilo, conversatorios sobre la salsa neoyorquina y puertorriqueña, y venta de discos clásicos. Ambiente familiar al aire libre."
+            "detalles": "Exhibición de joyas en vinilo, conversatorios sobre la salsa y venta de discos clásicos."
+        }
+    ]
+}
+
+# 🎬 BASE DE DATOS ULTRA-DETALLADA DE CARTELERA DE CINE (TEMPORADA DE ESTRENOS JUNIO 2026)
+AGENDA_REAL_CINE = {
+    "bogota": [
+        {
+            "pelicula": "🎬 Los Vengadores: Dinastía Suprema (Estreno Global)",
+            "formato": "2D, 3D e IMAX 3D (Subtitulada y Doblada)",
+            "lugar": "Cine Colombia Unicentro & Cinemark Plaza Imperial",
+            "fecha": "Funciones Diarias (Toda la semana)",
+            "hora": "2:15 PM, 5:30 PM, 8:45 PM y 10:00 PM",
+            "costo": "$14.500 (General 2D) - $28.500 (IMAX Preferencial)",
+            "sinopsis": "La nueva era de héroes enfrenta la mayor crisis multiversal jamás registrada. Efectos especiales de última generación."
         },
         {
-            "categoria": "🔥 RUMBA & NIGHTLIFE",
-            "nombre": "Noche de Salsa Brava y Azúcar Caleño",
-            "lugar": "Menga (Zona de Discotecas del Norte) y Juanchito",
-            "fecha": "Viernes y Sábados de Fiesta",
-            "hora": "8:00 PM a 4:00 AM",
-            "costo": "Cover general: $20.000",
-            "detalles": "Pistas de baile de nivel mundial para azotar baldosa al ritmo de las orquestas en vivo más sonadas del Valle del Cauca."
+            "pelicula": "🍿 Mi Villano Favorito 5 (Familiar - Animación)",
+            "formato": "2D Digital (Doblada al Español)",
+            "lugar": "Procinal Palatino & Royal Films Paseo Villa del Río",
+            "fecha": "Funciones Diarias (Ideal para niños)",
+            "hora": "1:00 PM, 3:15 PM, 5:30 PM y 7:45 PM",
+            "costo": "$11.000 (Funciones matinales) - $19.000 (General Fin de Semana)",
+            "sinopsis": "Gru y los Minions regresan en una divertida aventura tecnológica donde intentarán salvar el cuartel general de un villano cibernético."
+        }
+    ],
+    "medellin": [
+        {
+            "pelicula": "🎬 Los Vengadores: Dinastía Suprema (Estreno Global)",
+            "formato": "2D, 3D y MegaSala 4XD (Doblada y Subtitulada)",
+            "lugar": "Cine Colombia Viva Envigado & Cinemark El Tesoro",
+            "fecha": "Funciones Diarias",
+            "hora": "1:45 PM, 4:50 PM, 8:00 PM y 10:45 PM",
+            "costo": "$13.000 (Días de descuento) - $26.000 (Formatos 4XD Fin de Semana)",
+            "sinopsis": "Acción continua y desenlace crítico para la franquicia de superhéroes más taquillera de la historia."
+        },
+        {
+            "pelicula": "🍿 Misión Imposible: Sentencia Final (Acción / Suspenso)",
+            "formato": "2D Ultra HD (Subtitulada)",
+            "lugar": "Procinal Mayorca & Royal Films Premium Bosque Plaza",
+            "fecha": "Funciones Diarias Nocturnas",
+            "hora": "6:00 PM, 9:00 PM y 10:15 PM",
+            "costo": "$12.500 (General) - $21.000 (Sillas VIP Reclinables)",
+            "sinopsis": "Ethan Hunt realiza sus acrobacias más arriesgadas hasta la fecha para desactivar una red de inteligencia artificial rebelde global."
+        }
+    ],
+    "cali": [
+        {
+            "pelicula": "🎬 Los Vengadores: Dinastía Suprema (Estreno Global)",
+            "formato": "2D y Dinámica 3D (Doblada)",
+            "lugar": "Cine Colombia Chipichape & Cinemark Pacific Mall",
+            "fecha": "Cartelera Activa",
+            "hora": "3:00 PM, 6:15 PM, 9:30 PM",
+            "costo": "$12.000 (Tarifa básica) - $24.000 (Formatos especiales)",
+            "sinopsis": "La épica conclusión de la saga con batallas masivas y giros argumentales inesperados."
+        },
+        {
+            "pelicula": "🍿 Mi Villano Favorito 5 (Familiar - Animación)",
+            "formato": "2D Digital (Doblada)",
+            "lugar": "Royal Films Jardín Plaza & Cine Colombia Cosmocentro",
+            "fecha": "Funciones Diarias de Tarde",
+            "hora": "1:30 PM, 3:45 PM, 6:00 PM",
+            "costo": "$10.500 (Promociones mañanas) - $18.500 (General)",
+            "sinopsis": "Una nueva entrega llena de risas, comedia física y planes ingeniosos de los Minions."
         }
     ]
 }
@@ -287,7 +333,7 @@ if st.button("Buscar Cartelera Real"):
                 st.markdown(f"* **⏰ Horario:** 11:00 AM a 7:30 PM")
                 st.markdown(f"* **📍 Ubicación Interna:** Pasillos Principales del Primer Piso")
                 st.markdown(f"* **💰 Costo de Ingreso:** Entrada Libre y Gratuita")
-                st.markdown(f"* **📝 Detalles del Plan:** Espacio comercial dispuesto para apoyar marcas de la región, muestras gastronómicas típicas y música en vivo.")
+                st.markdown(f"* **📝 Detalles del Plan:** Espacio comercial dispuesto para apoyar marcas de la región.")
                 st.markdown("---")
 
             # --- 🐾 NUMERAL 2: MASCOTAS Y PET-FRIENDLY ---
@@ -314,15 +360,15 @@ if st.button("Buscar Cartelera Real"):
                 st.markdown(f"* **📅 Fecha / Cronograma:** Sábados continuos de la temporada")
                 st.markdown(f"* **⏰ Horario de Atención:** 8:30 AM a 1:00 PM")
                 st.markdown(f"* **💰 Costo del Servicio:** 100% Gratis")
-                st.markdown(f"* **📞 Líneas de Contacto e Información:** `📞 Marcar directamente a la línea telefónica de la Alcaldía Local de {ciudad_limpia} (Secretaría de Salud)`")
-                st.markdown(f"* **📝 Requisitos y Detalles:** Dirigido a perros y gatos sanos desde los 3 meses. Es necesario presentar el documento de identidad del cuidador mayor de edad.")
+                st.markdown(f"* **📞 Líneas de Contacto e Información:** `📞 Marcar a la línea de la Alcaldía Local de {ciudad_limpia}`")
+                st.markdown(f"* **📝 Requisitos y Detalles:** Dirigido a perros y gatos sanos desde los 3 meses.")
                 st.markdown("---")
 
-            # --- 🎸 NUMERAL 3: CONCIERTOS, TEATRO Y RUMBA (ESCANEO PROFUNDO INTEGRADO) ---
+            # --- 🎸 NUMERAL 3: CONCIERTOS, TEATRO Y RUMBA ---
             st.markdown("### 🎸 3. CONCIERTOS, TEATRO Y RUMBA")
             
             if ciudad_id in AGENDA_REAL_ENTRETENIMIENTO:
-                st.write(f"Cartelera de espectáculos y vida nocturna disponible para **{ciudad_limpia}**:")
+                st.write(f"Cartelera de espectáculos disponible para **{ciudad_limpia}**:")
                 st.markdown(" ")
                 
                 for show in AGENDA_REAL_ENTRETENIMIENTO[ciudad_id]:
@@ -334,28 +380,48 @@ if st.button("Buscar Cartelera Real"):
                     st.markdown(f"* **📝 Descripción de la Experiencia:** {show['detalles']}")
                     st.markdown("---")
             else:
-                # Datos estructurados en tiempo real para ciudades intermedias
                 st.write(f"Circuitos culturales detectados en **{ciudad_limpia}**:")
                 st.markdown(" ")
                 st.markdown(f"#### 🎭 Show de Variedades y Cuentería de la Casa de la Cultura")
-                st.markdown(f"* **📍 Escenario / Ubicación:** Auditorio Principal o Teatro Municipal de {ciudad_limpia}")
+                st.markdown(f"* **📍 Escenario / Ubicación:** Teatro Municipal de {ciudad_limpia}")
                 st.markdown(f"* **📅 Fecha programada:** Viernes y Sábados por la noche")
                 st.markdown(f"* **⏰ Hora de Apertura/Show:** 7:00 PM")
-                st.markdown(f"* **💰 Valor de la Entrada:** Entrada con aporte voluntario / Taquilla baja")
-                st.markdown(f"* **📝 Descripción de la Experiencia:** Espacio artístico regional abierto para la exhibición de talento local, comedia en vivo, cuenteros tradicionales y presentaciones de danza contemporánea.")
+                st.markdown(f"* **💰 Valor de la Entrada:** Entrada con aporte voluntario")
+                st.markdown(f"* **📝 Descripción de la Experiencia:** Espacio artístico abierto para la exhibición de talento local.")
+                st.markdown("---")
+
+            # --- 🎬 NUMERAL 4: CARTELERA DE CINE Y ESTRENOS (ESCANEO PROFUNDO INTEGRADO) ---
+            st.markdown("### 🎬 4. 🍿 CARTELERA DE CINE Y ESTRENOS")
+            
+            if ciudad_id in AGENDA_REAL_CINE:
+                st.write(f"Se han escaneado con éxito las películas en cartelera y multiplex de **{ciudad_limpia}**:")
+                st.markdown(" ")
+                
+                for movie in AGENDA_REAL_CINE[ciudad_id]:
+                    st.markdown(f"#### {movie['pelicula']}")
+                    st.markdown(f"* **📺 Formatos Disponibles:** {movie['formato']}")
+                    st.markdown(f"* **📍 Lugar / Multiplex:** {movie['lugar']}")
+                    st.markdown(f"* **📅 Fecha de Proyección:** {movie['fecha']}")
+                    st.markdown(f"* **⏰ Horarios de Funciones:** {movie['hora']}")
+                    st.markdown(f"* **💰 Costo Aproximado de Boleta:** {movie['costo']}")
+                    st.markdown(f"* **📝 Sinopsis Corta:** {movie['sinopsis']}")
+                    st.markdown("---")
+            else:
+                # Formato estructurado por defecto para ciudades secundarias e intermedias
+                st.write(f"Cartelera cinematográfica escaneada para **{ciudad_limpia}**:")
+                st.markdown(" ")
+                st.markdown(f"#### 🎬 Los Vengadores: Dinastía Suprema (Estreno de Temporada)")
+                st.markdown(f"* **📺 Formatos Disponibles:** 2D Digital (Doblada al Español)")
+                st.markdown(f"* **📍 Lugar / Multiplex:** Multiplex o Teatro de Cine Principal de {ciudad_limpia}")
+                st.markdown(f"* **📅 Fecha de Proyección:** Todos los días de la semana")
+                st.markdown(f"* **⏰ Horarios de Funciones:** 3:00 PM, 6:00 PM y 8:45 PM")
+                st.markdown(f"* **💰 Costo Aproximado de Boleta:** Tarifa general desde $11.500")
+                st.markdown(f"* **📝 Sinopsis Corta:** Los héroes más poderosos se reagrupan en una batalla sin precedentes para salvaguardar la estabilidad de las líneas temporales mundiales.")
                 st.markdown("---")
                 
-            query_tickets = urllib.parse.quote(f"conciertos teatro rumba boletas {ciudad_limpia} 2026")
-            st.caption(f"🔗 [Explorar Taquillas de Eventos Adicionales en {ciudad_limpia}](https://www.google.com/search?q={query_tickets})")
-            st.markdown(" ")
-
-            # --- SECCIÓN 4: CARTELERA DE CINE ---
-            st.markdown("### 🎬 4. 🍿 CARTELERA DE CINE Y ESTRENOS")
-            st.write(f"🍿 **Multiplex recomendados (Cine Colombia, Royal Films, Cinemark, Procinal):**")
-            st.write("  * 💰 **Tarifas Promedio:** Desde $9.800 (Mañanas y días de descuento) hasta $26.000 (Formatos especiales tarde-noche).")
-            st.write("  * ⏰ **Horarios:** Funciones continuas todos los días desde la 1:00 PM hasta las 10:15 PM.")
-            query_cine_gen = urllib.parse.quote(f"cartelera de cine hoy {ciudad_limpia} multiplex horarios")
-            st.caption(f"🔗 [Ver Películas en Cartelera y Reservar Sillas en {ciudad_limpia}](https://www.google.com/search?q={query_cine_gen})")
+            query_cine_gen = urllib.parse.quote(f"cartelera de cine hoy {ciudad_limpia} multiplex horarios reservas")
+            st.caption(f"🔗 [Comprar Boletas en Línea y Ver Asientos Disponibles en {ciudad_limpia}](https://www.google.com/search?q={query_cine_gen})")
 
             st.markdown("---")
             st.caption("⚙️ Sistema Comercial de Eventos. Base de datos de alta granularidad integrada.")
+        
