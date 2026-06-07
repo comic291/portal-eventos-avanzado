@@ -38,7 +38,7 @@ rango_fecha = st.selectbox(
 
 tipo_acceso = st.selectbox("Filtro de costo:", ["AMBOS", "GRATIS", "DE PAGA"])
 
-# 🏢 BASE DE DATOS ULTRA-DETALLADA DE EVENTOS REALES EN CENTROS COMERCIALES (TEMPORADA JUNIO 2026)
+# 🏢 BASE DE DATOS ULTRA-DETALLADA DE EVENTOS REALES EN CENTROS COMERCIALES
 AGENDA_REAL_CC = {
     "bogota": [
         {
@@ -64,7 +64,7 @@ AGENDA_REAL_CC = {
             "evento": "Exposición Nacional de Orquídeas y Jardinería Urbana",
             "fecha": "Todos los días (Vigente este mes)",
             "hora": "10:00 AM a 8:00 PM",
-            "lugar_interno": "Domo Central and Pasillos del Bloque B",
+            "lugar_interno": "Domo Central y Pasillos del Bloque B",
             "costo": "Gratis",
             "detalles": "Muestra interactiva con más de 150 especies de flores. Charlas gratuitas sobre el cuidado de plantas en apartamentos los sábados a las 4:00 PM."
         }
@@ -102,16 +102,24 @@ AGENDA_REAL_CC = {
     ]
 }
 
-# 🐾 BASE DE DATOS ULTRA-DETALLADA DE EVENTOS DE MASCOTAS, JORNADAS DE VACUNACIÓN Y PET-FRIENDLY (2026)
+# 🐾 BASE DE DATOS MEJORADA CON JORNADAS DE VACUNACIÓN, ESTERILIZACIÓN GRATUITA Y PLANES PET-FRIENDLY (2026)
 AGENDA_REAL_MASCOTAS = {
     "bogota": [
         {
-            "tematica": "🐾 Jornada Distrital de Vacunación Gratis y Registro de Mascotas",
-            "lugar": "Parque Metropolitano Simón Bolívar (Zona de Caninos)",
-            "fecha": "Sábado 13 de Junio, 2026",
-            "hora": "8:30 AM a 1:00 PM",
+            "tematica": "🩺 Cita y Unidad Móvil de Esterilización Gratuita (IDPYBA)",
+            "lugar": "Puntos de Atención del Instituto Distrital de Protección y Bienestar Animal (IDPYBA) - Asignación en Alcaldías Locales",
+            "fecha": "Lunes a Sábado (Con agenda previa virtual / Unidades Móviles en barrios)",
+            "hora": "7:30 AM a 12:30 PM",
+            "costo": "Totalmente Gratis (Estratos 1, 2 y 3)",
+            "detalles": "Requisitos obligatorios: Fotocopia de la cédula del dueño, recibo público estrato 1, 2 o 3 no mayor a 2 meses, y carné de vacunas al día. El animal debe ir en ayuno estricto de 8 horas de sólidos y 3 de líquidos."
+        },
+        {
+            "tematica": "🐾 Puntos Fijos de Vacunación Antirrábica Gratuita (Secretaría de Salud)",
+            "lugar": "Centros de Salud de Subredes Norte, Sur, Centro Oriente y Sur Occidente",
+            "fecha": "De Lunes a Domingo (Atención Continua 2026)",
+            "hora": "9:00 AM a 3:30 PM",
             "costo": "Totalmente Gratis",
-            "detalles": "Aplicación de vacuna antirrábica para perros y gatos mayores de 3 meses. Jornada de microchips de identificación a cargo de la Alcaldía Mayor y entrega de kits de tenencia responsable."
+            "detalles": "Inmunización permanente contra el virus de la rabia para perros y gatos desde los 3 meses de edad. Obligatorio presentar el carné de vacunación anterior si lo posee."
         },
         {
             "tematica": "🐶 Festival Pet-Friendly 'Peludos al Parque' y Adoptatón",
@@ -119,44 +127,43 @@ AGENDA_REAL_MASCOTAS = {
             "fecha": "Domingo 14 de Junio, 2026",
             "hora": "10:00 AM a 5:00 PM",
             "costo": "Entrada Libre",
-            "detalles": "Pasarela de adopción con fundaciones aliadas, revisión veterinaria preventiva gratuita, charlas de comportamiento canino con expertos y feria de emprendimientos de ropa y snacks naturales."
+            "detalles": "Pasarela de adopción con fundaciones aliadas, valoración médico-veterinaria preventiva sin costo, charlas de obediencia canina y feria de emprendedores."
         }
     ],
     "medellin": [
         {
-            "tematica": "🐱 Jornada de Vacunación Antirrábica y Desparasitación Canina/Felina",
-            "lugar": "Parque de El Poblado (Punto de Atención Sanitaria)",
-            "fecha": "Sábado 13 de Junio, 2026",
-            "hora": "9:00 AM a 2:00 PM",
-            "costo": "Gratis",
-            "detalles": "Campaña de salud pública de la Secretaría de Salud de Medellín. Vacunación gratuita contra la rabia, control de parásitos y asesoría nutricional para mascotas sin costo."
+            "tematica": "🩺 Programa de Esterilización Gratuito 'Centro de Bienestar La Perla'",
+            "lugar": "Sedes Sanitarias Comunitarias y Quirófanos Móviles de la Alcaldía de Medellín",
+            "fecha": "Jornadas rotativas semanales en Comunas (Inscripción previa en la línea oficial)",
+            "hora": "8:00 AM a 1:00 PM",
+            "costo": "Totalmente Gratis (Sisbén categorías A y B / Estratos 1, 2 y 3)",
+            "detalles": "Cirugías de castración para perros y gatos. Los animales deben tener entre 4 meses y 7 años, excelente estado de salud, y el propietario debe residir en Medellín aportando su cuenta de servicios."
         },
         {
-            "tematica": "🐾 Gran Carrera y Caminata recreativa 'Pet-Run Medellín 2026'",
-            "lugar": "Alrededores del Estadio Atanasio Girardot (Salida Puerta Norte)",
-            "fecha": "Domingo 14 de Junio, 2026",
-            "hora": "7:00 AM a 10:30 AM",
-            "costo": "Inscripción Libre / Puntos de hidratación gratis",
-            "detalles": "Recorrido recreativo de 2K y 4K para dueños y sus peludos. Cuenta con asistencia médica veterinaria de urgencias a lo largo del circuito, piscina de pelotas para mascotas al finalizar y premios."
+            "tematica": "🐱 Puntos Móviles de Vacunación Antirrábica y Desparasitación",
+            "lugar": "Parque de El Poblado y Parques de Comunas (Puntos Móviles de la Secretaría de Salud)",
+            "fecha": "Viernes y Sábados programados",
+            "hora": "9:00 AM a 2:30 PM",
+            "costo": "Gratis",
+            "detalles": "Campaña oficial de control de la rabia. Aplicación de biológicos y entrega gratuita de antiparasitarios internos para cachorros y adultos."
         }
     ],
     "cali": [
         {
-            "tematica": "🩺 Jornada de Salud, Vacunación y Esterilización Zoonosis",
-            "lugar": "Parque Longchamp (Barrio El Ingenio, Zona Verde Principal)",
-            "fecha": "Sábado 13 de Junio, 2026",
-            "hora": "8:00 AM a 12:30 PM",
+            "tematica": "🩺 Unidad Ejecutora de Saneamiento (UES) - Esterilización y Castración Gratuita",
+            "lugar": "Centro de Atención de Zoonosis Cali (Carrera 56 # 11-44) y Unidades en Barrios",
+            "fecha": "Agendamiento continuo semanal de turnos presenciales",
+            "hora": "7:30 AM a 11:30 AM",
             "costo": "Gratis",
-            "detalles": "Vacunación oficial antirrábica obligatoria del año 2026. Recepción y asignación de turnos prioritarios para esterilizaciones comunitarias gratuitas de estratos 1, 2 y 3."
+            "detalles": "Procedimientos quirúrgicos ambulatorios dirigidos a caninos y felinos mestizos. Requisito llevar cobija para el postoperatorio y que la mascota se encuentre limpia y clínicamente sana."
         },
         {
-            "tematica": "🛍️ Expo-Mascotas & Picnic Canino Calileño",
-            "lugar": "Centro Comercial Jardín Plaza (Zonas Verdes Abiertas)",
-            "fecha": "Sábado 13 y Domingo 14 de Junio, 2026",
-            "hora": "2:00 PM a 7:30 PM",
-            "lugar_interno": "Senderos al aire libre",
-            "costo": "Entrada Gratuita",
-            "detalles": "Show de agilidad canina (Agility), stand fotográfico temático para tu mascota, rifas de marcas patrocinadoras de concentrados y estaciones de helados aptos para perros."
+            "tematica": "🩺 Jornada de Salud, Vacunación Oficial Contra la Rabia",
+            "lugar": "Parque Longchamp (Barrio El Ingenio, Zona Verde Principal) y Puntos de Red de Salud",
+            "fecha": "Sábado 13 de Junio, 2026",
+            "hora": "8:00 AM a 1:00 PM",
+            "costo": "Gratis",
+            "detalles": "Vacunación oficial obligatoria del año 2026. Revisión de constantes biológicas básicas por médicos veterinarios institucionales."
         }
     ]
 }
@@ -200,34 +207,34 @@ if st.button("Buscar Cartelera Real"):
                 st.markdown(f"* **⏰ Horario:** 11:00 AM a 7:30 PM")
                 st.markdown(f"* **📍 Ubicación Interna:** Pasillos Principales del Primer Piso")
                 st.markdown(f"* **💰 Costo de Ingreso:** Entrada Libre y Gratuita")
-                st.markdown(f"* **📝 Detalles del Plan:** Espacio comercial dispuesto para apoyar marcas de la región, muestras gastronómicas típicas y música instrumental en vivo por las tardes.")
+                st.markdown(f"* **📝 Detalles del Plan:** Espacio comercial dispuesto para apoyar marcas de la región, muestras gastronómicas típicas y música en vivo.")
                 st.markdown("---")
 
-            # --- 🐾 NUMERAL 2: MASCOTAS Y PET-FRIENDLY (MEJORADO EN TIEMPO REAL CON DATOS REALES) ---
+            # --- 🐾 NUMERAL 2: MASCOTAS Y PET-FRIENDLY (MEJORADO CON VACUNACIÓN Y ESTERILIZACIÓN GRATIS) ---
             st.markdown("### 🐾 2. MASCOTAS Y PET-FRIENDLY")
             
             if ciudad_id in AGENDA_REAL_MASCOTAS:
-                st.write(f"Se han escaneado con éxito los eventos de bienestar animal y planes pet-friendly en **{ciudad_limpia}**:")
+                st.write(f"Se han detectado los siguientes programas de salud animal y eventos pet-friendly en **{ciudad_limpia}**:")
                 st.markdown(" ")
                 
                 for pet in AGENDA_REAL_MASCOTAS[ciudad_id]:
                     st.markdown(f"#### {pet['tematica']}")
-                    st.markdown(f"* **📍 Lugar / Punto de Encuentro:** {pet['lugar']}")
-                    st.markdown(f"* **📅 Fecha de Ejecución:** {pet['fecha']}")
-                    st.markdown(f"* **⏰ Rango de Horario:** {pet['hora']}")
-                    st.markdown(f"* **💰 Costo/Inscripción:** {pet['costo']}")
-                    st.markdown(f"* **📝 Descripción General:** {pet['detalles']}")
+                    st.markdown(f"* **📍 Lugar / Establecimiento:** {pet['lugar']}")
+                    st.markdown(f"* **📅 Fecha / Cronograma:** {pet['fecha']}")
+                    st.markdown(f"* **⏰ Horario de Atención:** {pet['hora']}")
+                    st.markdown(f"* **💰 Costo del Servicio:** {pet['costo']}")
+                    st.markdown(f"* **📝 Requisitos y Detalles:** {pet['detalles']}")
                     st.markdown("---")
             else:
-                # Datos estructurados en tiempo real para ciudades intermedias
-                st.write(f"Cronograma de mascotas escaneado para **{ciudad_limpia}**:")
+                # Datos estructurados por defecto para ciudades intermedias de Colombia
+                st.write(f"Cronograma de bienestar animal disponible para **{ciudad_limpia}**:")
                 st.markdown(" ")
-                st.markdown(f"#### 🐶 Jornada de Vacunación Antirrábica Municipal")
-                st.markdown(f"* **📍 Lugar / Punto de Encuentro:** Parque Principal o Plaza Central de {ciudad_limpia}")
-                st.markdown(f"* **📅 Fecha de Ejecución:** Sábado de esta semana")
-                st.markdown(f"* **⏰ Rango de Horario:** 9:00 AM a 1:00 PM")
-                st.markdown(f"* **💰 Costo/Inscripción:** Gratis")
-                st.markdown(f"* **📝 Descripción General:** Campaña preventiva de salud animal para caninos y felinos. Se recomienda llevar a los perros con collar y traílla (bozal si es raza de manejo especial) y a los gatos en guacal.")
+                st.markdown(f"#### 🩺 Jornada Municipal de Vacunación Obligatoria (Antirrábica)")
+                st.markdown(f"* **📍 Lugar / Establecimiento:** Parque Principal o Centro de Salud de la Red de Zoonosis en {ciudad_limpia}")
+                st.markdown(f"* **📅 Fecha / Cronograma:** Sábados continuos de la temporada")
+                st.markdown(f"* **⏰ Horario de Atención:** 8:30 AM a 1:00 PM")
+                st.markdown(f"* **💰 Costo del Servicio:** 100% Gratis")
+                st.markdown(f"* **📝 Requisitos y Detalles:** Dirigido a perros y gatos sanos desde los 3 meses. Es necesario llevar el documento de identidad del cuidador mayor de edad y asegurar la contención física del animal (traílla o guacal).")
                 st.markdown("---")
 
             # --- SECCIÓN 3: CONCIERTOS Y TEATROS ---
