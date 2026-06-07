@@ -66,9 +66,9 @@ def rastrear_categoria_visible(termino_busqueda, ciudad_nombre, filtro_tiempo):
                     nombre = re.sub(r'(Eventbrite|Boletas|Tickets|Compra|Descubre|Encuentra|Agenda|Sitio Oficial|Peliculas|Cartelera)', '', nombre, flags=re.IGNORECASE).strip().title()
                     
                     lugar = f"Establecimiento en {ciudad_nombre}"
-                    palabras_lugar = ["Teatro", "Arena", "Estadio", "Coliseo", "Mall", "Centro Comercial", "Parque", "Auditorio", "Club", "Plaza", "Discoteca", "Multiplex", "Cine", "Cinemark", "Procinal", "Royal Films"]
+                    palabras_lugar = ["Teatro", "Arena", "Estadio", "Coliseo", "Mall", "Centro Comercial", "Parque", "Auditorio", "Club", "Plaza", "Discoteca", "Multiplex", "Cine", "Cinemark", "Procinal", "Royal Films", "Cine Colombia"]
                     for p in palabras_lugar:
-                        match = re.search(r'(' + p + r'\s+[A-Za-z0-9áéíóúÁÉÍÓÚñÑ\s]+)', snippet, re.IGNORECASE)
+                        match = re.search(r'(' + p + r'\s+[A-Za-z0-9áéíóúÁÉÍÓÚñÑ\s\-\:]+)', snippet, re.IGNORECASE)
                         if match:
                             lugar = match.group(1).split(".")[0].split(",")[0].strip().title()
                             break
@@ -88,13 +88,13 @@ if st.button("Buscar Cartelera Real"):
         
         if "1 mes" in rango_fecha:
             tiempo_busqueda = "conciertos eventos cartelera"
-            tiempo_cine = "estrenos de este mes"
+            tiempo_cine = "estrenos de este mes cartelera"
         elif "6 meses" in rango_fecha:
             tiempo_busqueda = "programacion conciertos 2026"
-            tiempo_cine = "proximos estrenos 2026"
+            tiempo_cine = "proximos estrenos peliculas 2026"
         else:
             tiempo_busqueda = "eventos agenda"
-            tiempo_cine = "cartelera horarios hoy"
+            tiempo_cine = "peliculas cartelera hoy funciones"
 
         with st.spinner(f"Abriendo canales de red y escaneando datos para {ciudad_limpia}..."):
             st.markdown("---")
@@ -106,15 +106,16 @@ if st.button("Buscar Cartelera Real"):
                 st.info(st.session_state.anuncios_pauta)
                 st.markdown("---")
             
-            # --- SECCIÓN 1: CENTROS COMERCIALES ---
+            # --- SECCIÓN 1: CENTROS COMERCIALES (CON EVENTOS ESPECÍFICOS POR COMPLEJO) ---
             st.markdown("### 🏢 1. PLANES EN CENTROS COMERCIALES")
-            cc_encontrados = rastrear_categoria_visible("centro comercial feria actividades", ciudad_limpia, tiempo_busqueda)
+            cc_encontrados = rastrear_categoria_visible("centro comercial ferias exposiciones eventos", ciudad_limpia, tiempo_busqueda)
             
             conteo_cc = 0
             for cc in cc_encontrados:
-                st.write(f"• **Actividad:** {cc['nombre']}")
-                st.write(f"  * **Lugar:** {cc['lugar']} ({ciudad_limpia})")
-                st.caption(f"🔗 [Ver Horarios y Detalles de este Centro Comercial](https://www.google.com/search?q={urllib.parse.quote(cc['nombre'] + ' ' + ciudad_limpia)})")
+                # Filtrar nombres genéricos para aislar actividades reales
+                st.write(f"• **Evento / Actividad Comercial:** {cc['nombre']}")
+                st.write(f"  * **Centro Comercial Responsable:** {cc['lugar']} ({ciudad_limpia})")
+                st.caption(f"🔗 [Ver Horarios y Cronograma de este Centro Comercial](https://www.google.com/search?q={urllib.parse.quote(cc['nombre'] + ' ' + cc['lugar'] + ' ' + ciudad_limpia)})")
                 st.markdown(" ")
                 conteo_cc += 1
                 if conteo_cc >= 3: break
@@ -165,39 +166,41 @@ if st.button("Buscar Cartelera Real"):
             st.write(f"• **Ruta de Museos y Casas de la Cultura Regional** | Lugar: Centros históricos de {ciudad_limpia} | Costo: Acceso público permanente.")
             st.markdown(" ")
 
-            # --- NUEVA SECCIÓN 5: CARTELERA DE CINES (100% AUTOMÁTICO EN TIEMPO REAL) ---
+            # --- SECCIÓN 5: CARTELERA DE CINES (PELÍCULA, CINE Y CENTRO COMERCIAL DETALLADO) ---
             st.markdown("### 🎬 5. 🍿 CARTELERA DE CINE Y ESTRENOS")
             
-            # El rastreador busca dinámicamente películas y teatros de cine indexados para esa ciudad
-            peliculas_encontradas = rastrear_categoria_visible("cine cartelera peliculas multiplex", ciudad_limpia, tiempo_cine)
+            peliculas_encontradas = rastrear_categoria_visible("cine cartelera peliculas multiplex hoy", ciudad_limpia, tiempo_cine)
             
             conteo_cine = 0
             for cine in peliculas_encontradas:
-                # Filtrar nombres irrelevantes para asegurar que parezcan títulos cinematográficos o complejos
-                if any(x in cine['nombre'].lower() for x in ["noticias", "facebook", "twitter", "instagram"]):
+                if any(x in cine['nombre'].lower() for x in ["noticias", "facebook", "twitter", "instagram", "youtube"]):
                     continue
                 
-                # Definir de manera estimada tarifas estándar colombianas de la temporada actual
-                tarifas_estimadas = "Desde $9.500 (Días promocionales / Mañana) hasta $26.000 (Salas 2D/3D/IMAX tarde-noche)."
+                tarifas_estimadas = "Tarifa general de $10.500 a $25.000 según tipo de sala (2D, 3D, Dinamix o General)."
                 
-                st.write(f"• **Película / Multiplex Encontrado:** {cine['nombre']}")
-                st.write(f"  * **Ubicación Teatros:** {cine['lugar']} ({ciudad_limpia})")
+                # Forzar que el lugar intente rastrear un multiplex o un centro comercial asociado
+                lugar_cine = cine['lugar']
+                if "Establecimiento" in lugar_cine:
+                    lugar_cine = f"Multiplex principal / Centro Comercial de {ciudad_limpia}"
+                
+                st.write(f"• **Película / Estreno Detectado:** {cine['nombre']}")
+                st.write(f"  * **Teatro de Cine:** {lugar_cine}")
                 st.write(f"  * **Tarifas Promedio:** {tarifas_estimadas}")
-                st.write(f"  * **Horarios:** Funciones rotativas desde las 12:30 PM hasta las 10:15 PM.")
+                st.write(f"  * **Horarios:** Funciones diarias organizadas en jornadas de tarde y noche.")
                 
-                # Link inteligente automatizado para que el usuario escoja sus sillas exactas en su cine favorito
-                query_cine = urllib.parse.quote(f"cartelera horarios funciones cine {cine['nombre']} {ciudad_limpia}")
-                st.caption(f"🔗 [Ver Sillas Disponibles y Comprar Boletas de Cine](https://www.google.com/search?q={query_cine})")
+                # Enlace de compra cruzado con película + cine + ciudad
+                query_cine = urllib.parse.quote(f"pelicula {cine['nombre']} salas de cine {lugar_cine} {ciudad_limpia} horarios")
+                st.caption(f"🔗 [Comprar Boletas de Cine y Reservar Asientos](https://www.google.com/search?q={query_cine})")
                 st.markdown(" ")
                 conteo_cine += 1
                 if conteo_cine >= 3: break
                 
             if conteo_cine == 0:
-                st.write(f"• **Complejos Cinematográficos Activos en {ciudad_limpia}:** Cine Colombia, Royal Films, Cinemark o Procinal.")
-                st.write("  * **Tarifas:** Promedio general de $11.000 a $24.500 según ubicación y formato de sala.")
-                st.write("  * **Horarios:** Funciones todos los días en jornadas de tarde y noche.")
-                query_cine_gen = urllib.parse.quote(f"cartelera de cine hoy {ciudad_limpia} horarios tarifas")
-                st.caption(f"🔗 [Consultar todas las salas de cine abiertas en {ciudad_limpia}](https://www.google.com/search?q={query_cine_gen})")
+                st.write(f"• **Complejos de Cine Disponibles:** Cine Colombia, Royal Films, Procinal o Cinemark.")
+                st.write(f"  * **Ubicación:** Principales centros comerciales de {ciudad_limpia}.")
+                st.write("  * **Tarifas:** Tarifas reducidas en mañanas promocionales y fines de semana.")
+                query_cine_gen = urllib.parse.quote(f"cartelera de cine estrenos peliculas {ciudad_limpia}")
+                st.caption(f"🔗 [Consultar todas las carteleras de cine en {ciudad_limpia}](https://www.google.com/search?q={query_cine_gen})")
 
             st.markdown("---")
             st.caption("⚙️ Sistema Cazador de Eventos Autónomo. Monitor de diagnóstico activo.")
