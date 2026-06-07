@@ -136,7 +136,7 @@ AGENDA_REAL_CC = {
             "hora": "10:00 AM a 9:00 PM",
             "lugar_interno": "Plaza del Teatro y Pasillos del Segundo Nivel",
             "costo": "Gratis",
-            "detalles": "Muestra de más de 25 vehicles históricos restaurados. Conversatorio sobre restauración automotriz el sábado por la tarde."
+            "detalles": "Muestra de más de 25 vehículos históricos restaurados. Conversatorio sobre restauración automotriz el sábado por la tarde."
         },
         {
             "cc": "Centro Comercial Viva Envigado",
@@ -154,7 +154,7 @@ AGENDA_REAL_CC = {
 AGENDA_REAL_MASCOTAS = {
     "bogota": [
         {
-            "tematica": "ユニット Unit: Unidad Móvil de Esterilización Gratuita (IDPYBA)",
+            "tematica": "🩺 Unidad Móvil de Esterilización Gratuita (IDPYBA)",
             "lugar": "Puntos de Atención Móvil de Protección Animal - Alcaldías Locales",
             "fecha": f"Lunes a Sábado de {nombre_mes}",
             "hora": "7:30 AM a 12:30 PM",
@@ -299,7 +299,7 @@ if sorpresa_btn:
     if not ciudad:
         st.warning("Escribe primero tu ciudad para darte un plan sorpresa.")
     else:
-        st.balloons()  # 🎉 EFECTO VIRAL DE CELEBRACIÓN
+        st.balloons()  
         ejecutar_render = True
 elif buscar_btn:
     if not ciudad:
@@ -315,7 +315,6 @@ if ejecutar_render:
         st.markdown("---")
         st.markdown(f"### 📍 Explorando Cartelera en: {ciudad_limpia}")
         
-        # --- FUNCIÓN PREMIUM DE RECOMENDACIÓN ALEATORIA (DENTRO DE LA APP) ---
         if sorpresa_btn:
             st.success("🎲 ¡TU PLAN RECOMENDADO ALEATORIO PARA HOY!")
             opciones_sorpresa = []
@@ -329,8 +328,9 @@ if ejecutar_render:
             else:
                 st.info("¡Sal a dar una caminata al aire libre hoy! Explora las pestañas para ver las opciones disponibles.")
         
-        # --- PESTAÑAS DE NAVEGACIÓN PARA MÁXIMA PERMANENCIA MÓVIL ---
-        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+        # --- PESTAÑAS DE NAVEGACIÓN INCLUYENDO LA NUEVA PESTAÑA RESALTADA PARA JÓVENES ---
+        tab_gratis, tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+            "🔥 TODO GRATIS", # La pestaña imán para viralizar
             "🏢 Centros Comerciales", 
             "🐾 Mascotas", 
             "🎸 Eventos y Rumba", 
@@ -338,6 +338,56 @@ if ejecutar_render:
             "🏃 Deportes", 
             "🍳 Gastronomía"
         ])
+        
+        # --- 🔥 NUEVA SECCIÓN RESALTADA DE EVENTOS GRATIS ---
+        with tab_gratis:
+            st.markdown('<div class="section-header">🔥 PLANES CON ENTRADA LIBRE Y 100% GRATUITOS</div>', unsafe_allow_html=True)
+            st.write(f"### 👀 Parches sin presupuesto hoy en {ciudad_limpia}")
+            
+            contador_gratis = 0
+            
+            # Escaneo automático de Centros Comerciales Gratis
+            if ciudad_id in AGENDA_REAL_CC:
+                for ev in AGENDA_REAL_CC[ciudad_id]:
+                    if "gratis" in ev['costo'].lower() or "libre" in ev['costo'].lower():
+                        contador_gratis += 1
+                        with st.container(border=True):
+                            st.error("🏛️ EVENTO EN CENTRO COMERCIAL")
+                            st.markdown(f"#### {ev['cc']}")
+                            st.markdown(f"* **🎉 Plan:** {ev['evento']} | **📅 Cuándo:** {ev['fecha']}")
+                            st.markdown(f"* **⏰ Horario:** {ev['hora']}")
+                            st.markdown(f"* **📝 Detalles:** {ev['detalles']}")
+                            txt_wp = f"¡Parche GRATIS! 🏛️ {ev['cc']} - {ev['evento']}. {ev['fecha']} en {ciudad_limpia}."
+                            st.markdown(f"[📲 Pasalo al grupo de WhatsApp](https://api.whatsapp.com/send?text={urllib.parse.quote(txt_wp)})")
+            
+            # Escaneo automático de Bienestar/Mascotas Gratis
+            if ciudad_id in AGENDA_REAL_MASCOTAS:
+                for pet in AGENDA_REAL_MASCOTAS[ciudad_id]:
+                    if "gratis" in pet['costo'].lower() or "libre" in pet['costo'].lower():
+                        contador_gratis += 1
+                        with st.container(border=True):
+                            st.error("🐾 BIENESTAR Y MASCOTAS")
+                            st.markdown(f"#### {pet['tematica']}")
+                            st.markdown(f"* **📍 Punto:** {pet['lugar']} | **⏰ Horarios:** {pet['hora']}")
+                            st.markdown(f"* **📝 Indicaciones:** {pet['detalles']}")
+                            txt_wp = f"Servicio gratis para mascotas en {ciudad_limpia}: {pet['tematica']}."
+                            st.markdown(f"[📲 Compartir por WhatsApp](https://api.whatsapp.com/send?text={urllib.parse.quote(txt_wp)})")
+
+            # Escaneo automático de Deportes Gratis
+            if ciudad_id in AGENDA_REAL_DEPORTES:
+                for dep in AGENDA_REAL_DEPORTES[ciudad_id]:
+                    if "gratis" in dep['costo'].lower() or "libre" in dep['costo'].lower():
+                        contador_gratis += 1
+                        with st.container(border=True):
+                            st.error("🏃 DEPORTES Y AIRE LIBRE")
+                            st.markdown(f"#### 🗺️ {dep['actividad']}")
+                            st.markdown(f"* **📍 Recorrido:** {dep['rutas']} | **⏰ Horarios:** {dep['hora']}")
+                            st.markdown(f"* **📝 Info:** {dep['detalles']}")
+                            txt_wp = f"Plan al aire libre gratis: {dep['actividad']} en {ciudad_limpia}."
+                            st.markdown(f"[📲 Enviar por WhatsApp](https://api.whatsapp.com/send?text={urllib.parse.quote(txt_wp)})")
+
+            if contador_gratis == 0:
+                st.info(f"✨ Todos los fines de semana hay ciclovías, parques recreativos y ferias de entrada libre en {ciudad_limpia}. Revisa las pestañas específicas para ver los detalles de accesos sin costo.")
         
         # --- NUMERAL 1: CENTROS COMERCIALES ---
         with tab1:
@@ -350,13 +400,12 @@ if ejecutar_render:
                         st.markdown(f"* **⏰ Horario:** {ev['hora']} | **📍 Ubicación:** {ev['lugar_interno']}")
                         st.markdown(f"* **💰 Costo:** `{ev['costo']}`")
                         st.markdown(f"* **📝 Información:** {ev['detalles']}")
-                        # 📲 COMPARTIR EN WHATSAPP (BOTÓN VIRAL)
                         txt_wp = f"¡Mira este plan! 🏛️ {ev['cc']} - {ev['evento']}. {ev['fecha']} en {ciudad_limpia}."
                         st.markdown(f"[📲 Compartir este plan por WhatsApp](https://api.whatsapp.com/send?text={urllib.parse.quote(txt_wp)})")
             else:
                 st.info(f"📅 Muestra comercial y ferias de emprendimiento local activas este fin de semana en los principales complejos comerciales de {ciudad_limpia}. Entrada libre.")
 
-            # --- NUMERAL 2: MASCOTAS Y PET-FRIENDLY ---
+        # --- NUMERAL 2: MASCOTAS Y PET-FRIENDLY ---
         with tab2:
             st.markdown('<div class="section-header">🐾 2. MASCOTAS Y PET-FRIENDLY</div>', unsafe_allow_html=True)
             if ciudad_id in AGENDA_REAL_MASCOTAS:
@@ -367,13 +416,12 @@ if ejecutar_render:
                         st.markdown(f"* **⏰ Horarios:** {pet['hora']} | **💰 Costo:** `{pet['costo']}`")
                         st.markdown(f"* **📞 Medios de Contacto:** {pet['contacto']}")
                         st.markdown(f"* **📝 Indicaciones:** {pet['detalles']}")
-                        # 📲 COMPARTIR EN WHATSAPP (BOTÓN VIRAL)
                         txt_wp = f"¡Información útil para mascotas en {ciudad_limpia}! 🐾 {pet['tematica']} - Lugar: {pet['lugar']}."
                         st.markdown(f"[📲 Compartir por WhatsApp](https://api.whatsapp.com/send?text={urllib.parse.quote(txt_wp)})")
             else:
                 st.info(f"🩺 Campañas locales de vacunación preventiva vigentes en los centros de salud de {ciudad_limpia}. Acude con tu mascota usando collar o guacal de seguridad.")
 
-            # --- NUMERAL 3: CONCIERTOS, TEATRO Y RUMBA ---
+        # --- NUMERAL 3: CONCIERTOS, TEATRO Y RUMBA ---
         with tab3:
             st.markdown('<div class="section-header">🎸 3. CONCIERTOS, TEATRO Y RUMBA</div>', unsafe_allow_html=True)
             if ciudad_id in AGENDA_REAL_ENTRETENIMIENTO:
@@ -383,7 +431,6 @@ if ejecutar_render:
                         st.markdown(f"* **📍 Escenario:** {show['lugar']} | **📅 Fecha:** {show['fecha']}")
                         st.markdown(f"* **⏰ Hora:** {show['hora']} | **💰 Entrada:** `{show['costo']}`")
                         st.markdown(f"* **📝 Detalles:** {show['detalles']}")
-                        # 📲 COMPARTIR EN WHATSAPP (BOTÓN VIRAL)
                         txt_wp = f"🚨 Plan de rumba/concierto en {ciudad_limpia}: {show['nombre']} en {show['lugar']}. ¿Vamos?"
                         st.markdown(f"[📲 Armar el parche por WhatsApp](https://api.whatsapp.com/send?text={urllib.parse.quote(txt_wp)})")
             else:
@@ -392,7 +439,7 @@ if ejecutar_render:
             query_tickets = urllib.parse.quote(f"conciertos teatro rumba boletas {ciudad_limpia} {ano_actual}")
             st.caption(f"🔗 [Consultar Taquilla Ampliada de Eventos en {ciudad_limpia}](https://www.google.com/search?q={query_tickets})")
 
-            # --- NUMERAL 4: CARTELERA DE CINE ---
+        # --- NUMERAL 4: CARTELERA DE CINE ---
         with tab4:
             st.markdown('<div class="section-header">🎬 4. 🍿 CARTELERA DE CINE Y ESTRENOS</div>', unsafe_allow_html=True)
             st.write(f"### 🎥 Películas en Cartelera - {ciudad_limpia}")
@@ -410,14 +457,13 @@ if ejecutar_render:
                     st.markdown(f"* **⏰ Horarios Tentativos:** `2:30 PM`, `5:45 PM`, `8:15 PM` y `9:45 PM`")
                     st.markdown(f"* **💰 Costo Regular:** General desde $12.500 hasta $26.000")
                     st.markdown(f"* **📝 Trama:** {mov['sinopsis']}")
-                    # 📲 COMPARTIR EN WHATSAPP (BOTÓN VIRAL)
                     txt_wp = f"🍿 Vamos a cine en {ciudad_limpia} a ver: {mov['titulo']}. Salas: {multiplex_locales}."
                     st.markdown(f"[📲 Invitar a alguien por WhatsApp](https://api.whatsapp.com/send?text={urllib.parse.quote(txt_wp)})")
                 
             query_cine_gen = urllib.parse.quote(f"cartelera de cine hoy {ciudad_limpia} teatros horarios boletas")
             st.caption(f"🔗 [Reservar Sillas y Comprar Boletas Digitales en {ciudad_limpia}](https://www.google.com/search?q={query_cine_gen})")
 
-            # --- NUMERAL 5: DEPORTES, CICLOVÍAS Y ACTIVIDADES AL AIRE LIBRE ---
+        # --- NUMERAL 5: DEPORTES, CICLOVÍAS Y ACTIVIDADES AL AIRE LIBRE ---
         with tab5:
             st.markdown('<div class="section-header">🏃 5. DEPORTES, CICLOVÍAS Y ACTIVIDADES AL AIRE LIBRE</div>', unsafe_allow_html=True)
             if ciudad_id in AGENDA_REAL_DEPORTES:
@@ -428,7 +474,6 @@ if ejecutar_render:
                         st.markdown(f"* **📅 Cronograma:** {dep['fecha']} | **⏰ Horarios:** {dep['hora']}")
                         st.markdown(f"* **💰 Costo de Acceso:** `{dep['costo']}`")
                         st.markdown(f"* **📝 Dinámica del Plan:** {dep['detalles']}")
-                        # 📲 COMPARTIR EN WHATSAPP (BOTÓN VIRAL)
                         txt_wp = f"🚴 Plan deportivo al aire libre: {dep['actividad']} en {ciudad_limpia}. Horario: {dep['hora']}."
                         st.markdown(f"[📲 Compartir ruta por WhatsApp](https://api.whatsapp.com/send?text={urllib.parse.quote(txt_wp)})")
             else:
@@ -437,7 +482,7 @@ if ejecutar_render:
             query_deportes = urllib.parse.quote(f"ciclovia horarios eventos deportivos recreacion aire libre hoy {ciudad_limpia} {nombre_mes} {ano_actual}")
             st.caption(f"🔗 [Explorar Canchas, Senderos y Rutas Deportivas Activas en {ciudad_limpia}](https://www.google.com/search?q={query_deportes})")
 
-            # --- NUMERAL 6: EXPERIENCIAS GASTRONÓMICAS ---
+        # --- NUMERAL 6: EXPERIENCIAS GASTRONÓMICAS ---
         with tab6:
             st.markdown('<div class="section-header">🍳 6. RUTA GASTRONÓMICA Y EXPERIENCIAS CULINARIAS</div>', unsafe_allow_html=True)
             if ciudad_id in AGENDA_REAL_GASTRONOMIA:
@@ -448,7 +493,6 @@ if ejecutar_render:
                         st.markdown(f"* **📅 Días Disponibles:** {gast['fecha']} | **⏰ Horario de Atención:** {gast['hora']}")
                         st.markdown(f"* **💰 Rango Estimado de Precios:** `{gast['rango_costo']}`")
                         st.markdown(f"* **📝 Sobre la Experiencia:** {gast['detalles']}")
-                        # 📲 COMPARTIR EN WHATSAPP (BOTÓN VIRAL)
                         txt_wp = f"🍽️ ¡Qué hambre! Mira esta ruta gastronómica en {ciudad_limpia}: {gast['experiencia']} en {gast['zona']}."
                         st.markdown(f"[📲 Compartir restaurante por WhatsApp](https://api.whatsapp.com/send?text={urllib.parse.quote(txt_wp)})")
             else:
@@ -458,4 +502,4 @@ if ejecutar_render:
             st.caption(f"🔗 [Ver Mapa de Restaurantes y Recomendaciones de Comida en {ciudad_limpia}](https://www.google.com/search?q={query_gastronomia})")
 
         st.markdown("---")
-        st.caption(f"⚙️ Sistema Comercial de Eventos v2.6 - {ano_actual}. Interfaz Optimizada de Alta Permanencia.")
+        st.caption(f"⚙️ Sistema Comercial de Eventos v2.6 - {ano_actual}. Interfaz de Alta Permanencia con Filtro Viral Infiltrado.")
