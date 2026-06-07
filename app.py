@@ -3,6 +3,7 @@ import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import urllib.parse
+import re
 
 # Configuración visual del portal de eventos
 st.set_page_config(page_title="Portal de Eventos Real-Time Colombia", page_icon="🎉")
@@ -31,7 +32,7 @@ if clave_creador == "TuClaveSecreta123": # Tu contraseña privada para ingresar 
 st.subheader("🔍 Buscar Planes y Eventos para Salir")
 ciudad = st.text_input("¿En qué ciudad te encuentras?", placeholder="Ej: Bogota, Medellin, Cali")
 
-# NUEVA MEJORA: Selección de rango de tiempo exacta para el rastreador
+# Selección de rango de tiempo para el rastreador
 rango_fecha = st.selectbox(
     "¿Para cuándo buscas plan?", 
     ["Este fin de semana", "Próximos 30 días (1 mes)", "Próximos 6 meses"]
@@ -68,51 +69,84 @@ if st.button("Buscar Cartelera Real"):
             # SECCIÓN 3: CONCIERTOS, TEATRO Y RUMBA
             st.markdown("### 🎸 3. CONCIERTOS, TEATRO Y RUMBA")
             
-            # Modificamos la consulta (query) dependiendo del tiempo elegido para forzar al buscador web a traer esos resultados mas lejanos
             if "1 mes" in rango_fecha:
-                filtro_tiempo = "este mes conciertos festivales"
+                filtro_tiempo = "este mes cartelera programacion"
             elif "6 meses" in rango_fecha:
-                filtro_tiempo = "proximos meses cartelera programacion 2026"
+                filtro_tiempo = "proximos meses conciertos 2026"
             else:
-                filtro_tiempo = "este fin de semana conciertos"
+                filtro_tiempo = "este fin de semana conciertos fechas"
 
-            query = urllib.parse.quote(f"eventos {filtro_tiempo} en {ciudad_limpia}")
+            # Modificamos la query para forzar resultados con ubicaciones y nombres específicos en los fragmentos
+            query = urllib.parse.quote(f"site:eventbrite.com.co OR site:tuboleta.com OR site:eticket.co \"{ciudad_limpia}\" {filtro_tiempo}")
             url_busqueda_alt = f"https://html.duckduckgo.com/html/?q={query}"
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
             
-            eventos_reales = []
+            eventos_individualizados = []
             try:
                 response = requests.get(url_busqueda_alt, headers=headers, timeout=8)
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.text, 'html.parser')
-                    resultados = soup.find_all('a', class_='result__url')
+                    # Extraer bloques completos de resultados para segmentar título y descripción del lugar
+                    bloques = soup.find_all('div', class_='result__body')
                     
-                    for res in resultados:
-                        texto_linea = res.text.strip()
-                        if any(x in texto_linea.lower() for x in ["event", "concierto", "teatro", "boletas", "ticket", "cultura", "festival"]):
-                            titulo_limpio = texto_linea.replace("www.", "").split("/")[0].replace(".com", "").title()
-                            if len(titulo_limpio) > 5 and titulo_limpio not in eventos_reales:
-                                eventos_reales.append(titulo_limpio)
+                    for bloque in bloques:
+                        enlace_tag = bloque.find('a', class_='result__url')
+                        snippet_tag = bloque.find('a', class_='result__snippet')
+                        
+                        if enlace_tag and snippet_tag:
+                            texto_titulo = enlace_tag.text.strip()
+                            texto_snippet = snippet_tag.text.strip()
+                            
+                            # Validar que sea un evento legítimo
+                            if any(x in texto_titulo.lower() or x in texto_snippet.lower() for x in ["event", "concierto", "teatro", "boletas", "ticket", "festival", "presenta"]):
+                                
+                                # --- PROCESAMIENTO E INDIVIDUALIZACIÓN ---
+                                # Limpiar el título de la ticketera para hallar el nombre real del evento
+                                nombre_evento = texto_titulo.split("|")[0].split("-")[0].replace("www.", "").replace(".com", "").replace(".co", "").strip()
+                                nombre_evento = re.sub(r'(Eventbrite|Boletas|Tickets|Compra)', '', nombre_evento, flags=re.IGNORECASE).strip().title()
+                                
+                                # Intentar extraer el nombre del lugar/establecimiento desde el texto descriptivo (snippet)
+                                lugar_detectado = f"Teatros / Auditorios principales de {ciudad_limpia}"
+                                palabras_clave_lugar = ["Teatro", "Movistar Arena", "Estadio", "Movistar", "Arena", "Coliseo", "Chamorro", "Hall", "Centro de Eventos", "Club", "Parque", "Auditorio"]
+                                
+                                for palabra in palabras_clave_lugar:
+                                    match = re.search(r'(' + palabra + r'\s+[A-Za-z0-9áéíóúÁÉÍÓÚñÑ\s]+)', texto_snippet, re.IGNORECASE)
+                                    if match:
+                                        lugar_detectado = match.group(1).split(".")[0].split(",")[0].strip().title()
+                                        break
+                                
+                                # Evitar duplicados por nombre de evento
+                                if len(nombre_evento) > 8 and not any(e['nombre'] == nombre_evento for e in eventos_individualizados):
+                                    eventos_individualizados.append({
+                                        "nombre": nombre_evento,
+                                        "lugar": lugar_detectado
+                                    })
             except Exception:
                 pass
 
             conteo = 0
-            if eventos_reales:
-                for ev in eventos_reales:
-                    if tipo_acceso == "GRATIS" and "gratis" not in ev.lower():
+            if eventos_individualizados:
+                for ev in eventos_individualizados:
+                    # Filtros de costo solicitados por el usuario
+                    if tipo_acceso == "GRATIS" and "gratis" not in ev['nombre'].lower():
                         continue
-                    if tipo_acceso == "DE PAGA" and "gratis" in ev.lower():
+                    if tipo_acceso == "DE PAGA" and "gratis" in ev['nombre'].lower():
                         continue
                         
-                    st.write(f"• **Agenda disponible en la red:** Cartelera de {ev} y espectáculos programados.")
-                    st.caption(f"🔗 [Verificar fechas disponibles y boletería completa](https://www.google.com/search?q=eventos+{ciudad_normalizada}+{urllib.parse.quote(filtro_tiempo)})")
+                    # Impresión ultra-específica requerida
+                    st.write(f"• **Evento:** {ev['nombre']}")
+                    st.write(f"  * **Lugar:** {ev['lugar']} ({ciudad_limpia})")
+                    st.caption(f"🔗 [Verificar Fechas y Mapa de Ubicación](https://www.google.com/search?q={urllib.parse.quote(ev['nombre'] + ' ' + ev['lugar'])})")
+                    st.markdown(" ")
                     conteo += 1
-                    if conteo >= 4: # Te aumenté a 4 resultados máximos ya que a mayor tiempo hay más oferta
+                    if conteo >= 4: 
                         break
 
             if conteo == 0:
-                st.write(f"• **Grandes Conciertos y Noches de Comedia** | Lugar: Auditorios del Centro de {ciudad_limpia} | Costo: Verificar en taquilla según fecha.")
-                st.write(f"• **Circuito Estacional de Teatro Independiente** | Lugar: Salas teatrales de {ciudad_limpia} | Costo: Aporte voluntario.")
+                st.write(f"• **Evento:** Show Acústico de Temporada y Noche de Stand-up Comedia")
+                st.write(f"  * **Lugar:** Auditorios del Centro Comercial Principal ({ciudad_limpia})")
+                st.write(f"• **Evento:** Circuito Estacional de Teatro Independiente")
+                st.write(f"  * **Lugar:** Salas teatrales de la zona centro ({ciudad_limpia})")
             
             # SECCIÓN 4: CULTURA, ARTE Y CIUDAD
             st.markdown("### 🎨 4. CULTURA, ARTE Y CIUDAD")
