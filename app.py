@@ -10,7 +10,7 @@ if "anuncio_vip" not in st.session_state:
 
 st.sidebar.markdown("### 🔐 Gestión Privada (Solo tú)")
 clave_acceso = st.sidebar.text_input("Contraseña de Admin:", type="password")
-if clave_acceso == "TU_CLAVE_AQUI": # Define tu clave aquí
+if clave_acceso == "Alex2026": # Define tu clave aquí
     st.session_state.anuncio_vip = st.sidebar.text_area("Publicar aviso pago:", value=st.session_state.anuncio_vip)
 # -------------------------------------------------
 
